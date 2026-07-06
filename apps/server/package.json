@@ -4,7 +4,7 @@
 	"type": "module",
 	"private": true,
 	"scripts": {
-		"dev": "tsx watch src/index.ts",
+		"dev": "node --import tsx --watch src/index.ts",
 		"build": "tsdown",
 		"start": "node dist/index.mjs",
 		"typecheck": "tsgo --noEmit",
