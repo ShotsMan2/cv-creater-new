@@ -1,5 +1,5 @@
 const productionRootUrl = "https://rxresu.me/";
-const appName = "Reactive Resume";
+const appName = "Bylva - CvCreator";
 const repositoryUrl = "https://github.com/amruthpillai/reactive-resume";
 
 type JsonLd = Record<string, unknown>;
@@ -51,8 +51,7 @@ export const getRootStructuredData = (canonicalUrl: string): JsonLd[] => [
 		"@type": ["SoftwareApplication", "WebApplication"],
 		name: appName,
 		url: canonicalUrl,
-		description:
-			"Reactive Resume is a free and open-source resume builder that simplifies the process of creating, updating, and sharing your resume.",
+		description: appName,
 		applicationCategory: "BusinessApplication",
 		operatingSystem: "Web",
 		isAccessibleForFree: true,

@@ -37,11 +37,9 @@ type RouterContext = {
 	flags: FeatureFlags;
 };
 
-const appName = "Reactive Resume";
-const tagline = "A free and open-source resume builder";
-const title = `${appName} — ${tagline}`;
-const description =
-	"Reactive Resume is a free and open-source resume builder that simplifies the process of creating, updating, and sharing your resume.";
+const appName = "Bylva - CvCreator";
+const title = appName;
+const description = appName;
 
 export const Route = createRootRouteWithContext<RouterContext>()({
 	component: RootComponent,

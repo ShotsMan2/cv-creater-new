@@ -49,7 +49,7 @@ export function Header() {
 			transition={{ duration: 0.35, ease: "easeOut" }}
 		>
 			<nav aria-label={t`Main navigation`} className="container mx-auto flex items-center gap-x-4 p-3 lg:px-12">
-				<Link to="/" className="transition-opacity hover:opacity-80" aria-label={t`Reactive Resume - Go to homepage`}>
+				<Link to="/" className="transition-opacity hover:opacity-80" aria-label={t`Bylva - cv creator - Go to homepage`}>
 					<BrandIcon className="size-10" />
 				</Link>
 

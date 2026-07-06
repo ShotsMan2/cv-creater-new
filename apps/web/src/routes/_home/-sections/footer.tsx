@@ -60,13 +60,7 @@ export function Footer() {
 					<BrandIcon variant="logo" className="size-10" />
 
 					<div className="space-y-2">
-						<h2 className="font-semibold text-lg tracking-tight">Reactive Resume</h2>
-						<p className="max-w-xs text-muted-foreground text-sm leading-relaxed">
-							<Trans>
-								A free and open-source resume builder that simplifies the process of creating, updating, and sharing
-								your resume.
-							</Trans>
-						</p>
+						<h2 className="font-semibold text-lg tracking-tight">Bylva - CvCreator</h2>
 					</div>
 
 					{/* Social Links */}

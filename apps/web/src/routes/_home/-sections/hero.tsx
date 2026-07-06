@@ -69,7 +69,7 @@ export function Hero() {
 					<Trans>
 						<p className="font-medium text-muted-foreground tracking-tight md:text-lg">Finally,</p>
 						<h1 className="mt-1 font-semibold text-4xl tracking-tight md:text-5xl lg:text-6xl">
-							A free and open-source resume builder
+							Bylva - CvCreator
 						</h1>
 					</Trans>
 				</m.div>
@@ -82,8 +82,7 @@ export function Hero() {
 					transition={{ duration: 0.45, delay: 0.82 }}
 				>
 					<Trans>
-						Reactive Resume is a free and open-source resume builder that simplifies the process of creating, updating,
-						and sharing your resume.
+						Bylva - CvCreator
 					</Trans>
 				</m.p>
 
