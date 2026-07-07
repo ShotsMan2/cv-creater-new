@@ -4,6 +4,7 @@ import { useLingui } from "@lingui/react";
 import { Trans } from "@lingui/react/macro";
 import {
 	BrainIcon,
+	CaretUpIcon,
 	ChatCircleDotsIcon,
 	GearSixIcon,
 	KeyIcon,
@@ -177,6 +178,8 @@ export function DashboardSidebar() {
 										<p className="font-medium">{session.user.name}</p>
 										<p className="text-muted-foreground text-xs">{session.user.email}</p>
 									</div>
+
+									<CaretUpIcon className="ml-auto size-5 shrink-0 transition-[margin,opacity] duration-200 ease-in-out group-data-[collapsible=icon]:-ms-8 group-data-[collapsible=icon]:opacity-0" />
 								</SidebarMenuButton>
 							)}
 						</UserDropdownMenu>

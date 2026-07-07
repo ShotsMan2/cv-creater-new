@@ -57,7 +57,7 @@ export function Footer() {
 			<div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
 				{/* Brand Column */}
 				<div className="space-y-4 sm:col-span-2 lg:col-span-1">
-					<BrandIcon variant="logo" className="size-10" />
+					<BrandIcon variant="logo" className="size-20" />
 
 					<div className="space-y-2">
 						<h2 className="font-semibold text-lg tracking-tight">Bylva - CvCreator</h2>
