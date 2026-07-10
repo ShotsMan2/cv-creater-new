@@ -81,8 +81,15 @@ export async function handleWebApp(request: Request) {
 	const headers = getFallbackResponseHeaders(pathname);
 	if (!headers) return notFoundResponse({ noindex: true });
 
-	const html = await fs.readFile(indexHtmlPath, "utf-8");
-	return new Response(html, { headers });
+	try {
+		const html = await fs.readFile(indexHtmlPath, "utf-8");
+		return new Response(html, { headers });
+	} catch (error) {
+		if ((error as NodeJS.ErrnoException).code === "ENOENT") {
+			return new Response("Web app is not built. If you are running locally, access it through the Vite dev server (usually port 3003/3000).", { status: 404, headers: { "Content-Type": "text/plain" } });
+		}
+		throw error;
+	}
 }
 
 export function handleWebAppHead(request: Request) {

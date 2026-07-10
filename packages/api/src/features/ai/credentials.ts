@@ -65,16 +65,27 @@ export function encryptCredential(apiKey: string): StoredCredentialFields {
 	};
 }
 
+export class CredentialDecryptionError extends Error {
+	constructor(message = "Failed to decrypt credential.") {
+		super(message);
+		this.name = "CredentialDecryptionError";
+	}
+}
+
 export function decryptCredential(payload: string) {
 	const [version, encodedIv, encodedAuthTag, encodedCiphertext] = payload.split(".");
 	if (version !== CREDENTIAL_VERSION || !encodedIv || !encodedAuthTag || !encodedCiphertext) {
 		throw new Error("INVALID_ENCRYPTED_CREDENTIAL");
 	}
 
-	const decipher = createDecipheriv(CIPHER, getEncryptionKey(), decode(encodedIv));
-	decipher.setAuthTag(decode(encodedAuthTag));
+	try {
+		const decipher = createDecipheriv(CIPHER, getEncryptionKey(), decode(encodedIv));
+		decipher.setAuthTag(decode(encodedAuthTag));
 
-	return Buffer.concat([decipher.update(decode(encodedCiphertext)), decipher.final()]).toString("utf8");
+		return Buffer.concat([decipher.update(decode(encodedCiphertext)), decipher.final()]).toString("utf8");
+	} catch (_error) {
+		throw new CredentialDecryptionError();
+	}
 }
 
 export function redactEncryptedCredential(fields: StoredCredentialFields): RedactedCredentialFields {

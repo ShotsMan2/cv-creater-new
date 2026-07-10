@@ -6,6 +6,7 @@ import { db } from "@reactive-resume/db/client";
 import * as schema from "@reactive-resume/db/schema";
 import {
 	assertCredentialEncryptionConfigured,
+	CredentialDecryptionError,
 	decryptCredential,
 	encryptCredential,
 	redactEncryptedCredential,
@@ -123,11 +124,21 @@ export const aiProvidersService = {
 			throw new ORPCError("BAD_REQUEST", { message: "AI provider must be tested and enabled before use." });
 		}
 
-		return {
-			...toResponse(provider),
-			apiKey: decryptCredential(provider.encryptedApiKey),
-			baseURL: provider.baseUrl ?? "",
-		};
+		try {
+			return {
+				...toResponse(provider),
+				apiKey: decryptCredential(provider.encryptedApiKey),
+				baseURL: provider.baseUrl ?? "",
+			};
+		} catch (error) {
+			if (error instanceof CredentialDecryptionError) {
+				throw new ORPCError("BAD_REQUEST", {
+					message:
+						"AI_PROVIDER_DECRYPTION_FAILED: Failed to decrypt the AI provider's API key. Please update the API key in the integration settings.",
+				});
+			}
+			throw error;
+		}
 	},
 
 	getDefaultRunnable: async (input: { userId: string }) => {
@@ -146,13 +157,22 @@ export const aiProvidersService = {
 			.orderBy(orderByLastUsedAtDescNullsLast(), asc(schema.aiProvider.createdAt))
 			.limit(1);
 
-		return provider
-			? {
-					...toResponse(provider),
-					apiKey: decryptCredential(provider.encryptedApiKey),
-					baseURL: provider.baseUrl ?? "",
-				}
-			: null;
+		if (!provider) return null;
+
+		try {
+			return {
+				...toResponse(provider),
+				apiKey: decryptCredential(provider.encryptedApiKey),
+				baseURL: provider.baseUrl ?? "",
+			};
+		} catch (error) {
+			if (error instanceof CredentialDecryptionError) {
+				throw new ORPCError("BAD_REQUEST", {
+					message: "AI_PROVIDER_DECRYPTION_FAILED: Failed to decrypt the AI provider's API key. Please update the API key in settings.",
+				});
+			}
+			throw error;
+		}
 	},
 
 	create: async (input: CreateAiProviderInput) => {
@@ -226,9 +246,9 @@ export const aiProvidersService = {
 
 		const provider = await getOwnedProvider(input);
 		const parsedProvider = aiProviderSchema.parse(provider.provider);
-		const apiKey = decryptCredential(provider.encryptedApiKey);
 
 		try {
+			const apiKey = decryptCredential(provider.encryptedApiKey);
 			const ok = await testConnection({
 				provider: parsedProvider,
 				model: provider.model,
@@ -250,16 +270,29 @@ export const aiProvidersService = {
 			if (!updated) throw new ORPCError("NOT_FOUND");
 			return toResponse(updated);
 		} catch (error) {
+			let message = "Failed to test provider.";
+			if (error instanceof CredentialDecryptionError) {
+				message = "Failed to decrypt the API key. Please update the API key in settings.";
+			} else if (error instanceof Error) {
+				message = error.message;
+			}
+
 			const [updated] = await db
 				.update(schema.aiProvider)
 				.set({
 					enabled: false,
 					testStatus: "failure",
-					testError: error instanceof Error ? error.message : "Failed to test provider.",
+					testError: message,
 					lastTestedAt: new Date(),
 				})
 				.where(and(eq(schema.aiProvider.id, input.id), eq(schema.aiProvider.userId, input.userId)))
 				.returning();
+
+			if (error instanceof CredentialDecryptionError) {
+				throw new ORPCError("BAD_REQUEST", {
+					message: `AI_PROVIDER_DECRYPTION_FAILED: ${message}`,
+				});
+			}
 
 			if (!updated) throw error;
 			throw error;

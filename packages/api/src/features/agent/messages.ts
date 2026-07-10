@@ -1,3 +1,4 @@
+import { ORPCError } from "@orpc/client";
 import type { UIMessage } from "ai";
 import z from "zod";
 import { protectedProcedure } from "../../context";
@@ -32,7 +33,10 @@ export const messagesRouter = {
 				});
 			} catch (error) {
 				if (isAgentEnvironmentUnavailable(error)) throwUnavailable();
-				throw error;
+				if (error instanceof ORPCError) throw error;
+				throw new ORPCError("BAD_REQUEST", {
+					message: error instanceof Error ? error.message : "An unexpected error occurred.",
+				});
 			}
 		}),
 

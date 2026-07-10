@@ -182,16 +182,22 @@ export function NewThreadSetup({ resumeId }: NewThreadSetupProps) {
 									onSuccess: (thread) => {
 										void navigate({ to: "/agent/$threadId", params: { threadId: thread.id } });
 									},
-									onError: (error) =>
-										toast.error(
-											getOrpcErrorMessage(error, {
-												byCode: {
-													PRECONDITION_FAILED: t`AI agent setup is unavailable until REDIS_URL and ENCRYPTION_SECRET are configured.`,
-													BAD_REQUEST: t`Select a tested provider before starting a thread.`,
-												},
-												fallback: t`Failed to start agent thread.`,
-											}),
-										),
+									onError: (error) => {
+										const msg = error instanceof Error ? error.message : "";
+										if (msg.includes("AI_PROVIDER_DECRYPTION_FAILED")) {
+											toast.error(t`Failed to decrypt the AI provider's API key. Please update the API key in settings.`);
+										} else {
+											toast.error(
+												getOrpcErrorMessage(error, {
+													byCode: {
+														PRECONDITION_FAILED: t`AI agent setup is unavailable until REDIS_URL and ENCRYPTION_SECRET are configured.`,
+														BAD_REQUEST: t`Select a tested provider before starting a thread.`,
+													},
+													fallback: t`Failed to start agent thread.`,
+												}),
+											);
+										}
+									},
 								},
 							)
 						}

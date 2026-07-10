@@ -5,4 +5,3 @@ export const Route = createFileRoute("/_home/")({
 		throw redirect({ to: "/dashboard", replace: true });
 	},
 });
-

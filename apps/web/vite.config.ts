@@ -6,7 +6,7 @@ import babel from "@rolldown/plugin-babel";
 import tailwindcss from "@tailwindcss/vite";
 import { tanstackRouter } from "@tanstack/router-plugin/vite";
 import viteReact, { reactCompilerPreset } from "@vitejs/plugin-react";
-import { defineConfig } from "vite";
+import { defineConfig, loadEnv } from "vite";
 
 const rootPackageJsonPath = new URL("../../package.json", import.meta.url);
 const rootPackageJson = JSON.parse(readFileSync(rootPackageJsonPath, "utf-8")) as { version: string | undefined };
@@ -15,52 +15,57 @@ const workspaceRoot = fileURLToPath(new URL("../..", import.meta.url));
 
 const serverPaths = ["/api", "/mcp", "/uploads", "/.well-known", "/schema.json"] as const;
 
-const serverProxy = serverPaths.reduce(
-	(acc, path) => {
-		acc[path] = {
-			target: `http://localhost:${process.env.SERVER_PORT ?? "3001"}`,
-			changeOrigin: true,
-		};
-		return acc;
-	},
-	{} as Record<string, ProxyOptions>,
-);
+export default defineConfig(({ mode }) => {
+	const env = loadEnv(mode, workspaceRoot, "");
+	process.env = { ...process.env, ...env };
 
-export default defineConfig({
-	envDir: workspaceRoot,
-
-	resolve: {
-		tsconfigPaths: true,
-	},
-
-	define: {
-		__APP_VERSION__: appVersion,
-	},
-
-	build: {
-		chunkSizeWarningLimit: 10 * 1024, // 10 MB
-		rolldownOptions: {
-			external: ["bcrypt", "sharp", "@aws-sdk/client-s3", "ioredis", "linkedom"],
+	const serverProxy = serverPaths.reduce(
+		(acc, path) => {
+			acc[path] = {
+				target: `http://localhost:${env.SERVER_PORT ?? "3001"}`,
+				changeOrigin: true,
+			};
+			return acc;
 		},
-	},
+		{} as Record<string, ProxyOptions>,
+	);
 
-	server: {
-		host: true,
-		strictPort: true,
-		port: Number.parseInt(process.env.PORT ?? "3000", 10),
-		proxy: serverProxy,
-	},
+	return {
+		envDir: workspaceRoot,
 
-	plugins: [
-		tailwindcss(),
-		tanstackRouter({
-			target: "react",
-			semicolons: true,
-			quoteStyle: "double",
-			autoCodeSplitting: true,
-		}),
-		viteReact(),
-		lingui(),
-		babel({ presets: [reactCompilerPreset(), linguiTransformerBabelPreset()] }),
-	],
+		resolve: {
+			tsconfigPaths: true,
+		},
+
+		define: {
+			__APP_VERSION__: appVersion,
+		},
+
+		build: {
+			chunkSizeWarningLimit: 10 * 1024, // 10 MB
+			rolldownOptions: {
+				external: ["bcrypt", "sharp", "@aws-sdk/client-s3", "ioredis", "linkedom"],
+			},
+		},
+
+		server: {
+			host: true,
+			strictPort: true,
+			port: Number.parseInt(env.PORT ?? "3000", 10),
+			proxy: serverProxy,
+		},
+
+		plugins: [
+			tailwindcss(),
+			tanstackRouter({
+				target: "react",
+				semicolons: true,
+				quoteStyle: "double",
+				autoCodeSplitting: true,
+			}),
+			viteReact(),
+			lingui(),
+			babel({ presets: [reactCompilerPreset(), linguiTransformerBabelPreset()] }),
+		],
+	};
 });
