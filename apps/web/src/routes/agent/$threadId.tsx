@@ -509,7 +509,7 @@ function ChatMessage({ message, onAnswer, onRevert, isReverting, actionsById }: 
 				className={cn(
 					"space-y-3 text-sm",
 					isUser
-						? "max-w-[86%] rounded-md bg-primary px-4 py-3 text-primary-foreground"
+						? "max-w-[86%] rounded-md border border-border bg-[#171717] px-4 py-3 text-white"
 						: "w-full max-w-full py-1 text-foreground",
 				)}
 			>
@@ -846,6 +846,16 @@ function AgentChatMessages({
 	onRetry,
 	onStarterSelect,
 }: AgentChatMessagesProps) {
+	const bottomRef = useRef<HTMLDivElement>(null);
+
+	useEffect(() => {
+		const timeoutId = setTimeout(() => {
+			bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+		}, 100);
+		return () => clearTimeout(timeoutId);
+		// biome-ignore lint/correctness/useExhaustiveDependencies: We intentionally want to auto-scroll when these values change
+	}, [messages, isStreaming]);
+
 	return (
 		<ScrollArea className="min-h-0 flex-1">
 			<div className="mx-auto flex max-w-3xl flex-col gap-4 p-4">
@@ -889,6 +899,8 @@ function AgentChatMessages({
 						) : null}
 					</div>
 				) : null}
+
+				<div ref={bottomRef} className="h-0 w-full" />
 			</div>
 		</ScrollArea>
 	);
