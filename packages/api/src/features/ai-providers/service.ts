@@ -168,7 +168,8 @@ export const aiProvidersService = {
 		} catch (error) {
 			if (error instanceof CredentialDecryptionError) {
 				throw new ORPCError("BAD_REQUEST", {
-					message: "AI_PROVIDER_DECRYPTION_FAILED: Failed to decrypt the AI provider's API key. Please update the API key in settings.",
+					message:
+						"AI_PROVIDER_DECRYPTION_FAILED: Failed to decrypt the AI provider's API key. Please update the API key in settings.",
 				});
 			}
 			throw error;

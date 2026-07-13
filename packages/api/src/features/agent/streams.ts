@@ -1,9 +1,9 @@
 import type { UIMessageChunk } from "ai";
 import type { ResumableStreamContext } from "resumable-stream/ioredis";
 import { JsonToSseTransformStream } from "ai";
-import { env } from "@reactive-resume/env/server";
 import Redis from "ioredis";
 import { createResumableStreamContext } from "resumable-stream/ioredis";
+import { env } from "@reactive-resume/env/server";
 
 type AgentStreamContext = Pick<ResumableStreamContext, "createNewResumableStream" | "resumeExistingStream">;
 
@@ -20,8 +20,6 @@ export function emptyAgentStream() {
 		},
 	});
 }
-
-
 
 function getAgentStreamContext() {
 	if (!streamContext) {

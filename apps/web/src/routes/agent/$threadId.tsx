@@ -106,6 +106,7 @@ type AgentChatProps = {
 	actions: AgentAction[];
 	onToggleThreads?: () => void;
 	onToggleResume?: () => void;
+	isThreadsCollapsed?: boolean;
 };
 
 type AgentChatReadOnlyBannerProps = {
@@ -136,6 +137,7 @@ type AgentChatHeaderProps = {
 	onDelete: () => void;
 	onToggleResume?: () => void;
 	onToggleThreads?: () => void;
+	isThreadsCollapsed?: boolean;
 };
 
 type AgentChatComposerProps = {
@@ -537,6 +539,7 @@ function AgentChat({
 	actions,
 	onToggleThreads,
 	onToggleResume,
+	isThreadsCollapsed,
 }: AgentChatProps) {
 	const queryClient = useQueryClient();
 	const navigate = useNavigate();
@@ -783,6 +786,7 @@ function AgentChat({
 				onDelete={() => void handleDelete()}
 				onToggleResume={onToggleResume}
 				onToggleThreads={onToggleThreads}
+				isThreadsCollapsed={isThreadsCollapsed}
 			/>
 
 			<AgentChatReadOnlyBanner isReadOnly={isReadOnly} readOnlyReason={readOnlyReason} />
@@ -900,11 +904,12 @@ function AgentChatHeader({
 	onDelete,
 	onToggleResume,
 	onToggleThreads,
+	isThreadsCollapsed,
 }: AgentChatHeaderProps) {
 	return (
 		<div className="flex h-14 shrink-0 items-center justify-between border-b px-4">
 			<div className="flex min-w-0 items-center gap-2">
-				{onToggleThreads ? (
+				{onToggleThreads && isThreadsCollapsed ? (
 					<Button size="icon-sm" variant="ghost" onClick={onToggleThreads}>
 						<SidebarSimpleIcon />
 						<span className="sr-only">
@@ -1294,7 +1299,11 @@ function RouteComponent() {
 						collapsedSize="0px"
 						onResize={(size) => setIsThreadsCollapsed(size.inPixels < 24)}
 					>
-						<AgentThreadSidebar activeThreadId={threadId} className={cn(isThreadsCollapsed && "invisible")} />
+						<AgentThreadSidebar
+							activeThreadId={threadId}
+							className={cn(isThreadsCollapsed && "invisible")}
+							onToggleThreads={toggleThreadsPanel}
+						/>
 					</ResizablePanel>
 					<ResizableSeparator withHandle />
 					<ResizablePanel id="chat" defaultSize="52%" minSize="280px">
@@ -1308,6 +1317,7 @@ function RouteComponent() {
 							actions={data.actions}
 							onToggleThreads={toggleThreadsPanel}
 							onToggleResume={toggleResumePanel}
+							isThreadsCollapsed={isThreadsCollapsed}
 						/>
 					</ResizablePanel>
 					<ResizableSeparator withHandle />

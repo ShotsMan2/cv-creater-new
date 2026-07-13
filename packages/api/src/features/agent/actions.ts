@@ -33,7 +33,12 @@ export const actionsRouter = {
 		.input(z.object({ id: z.string(), name: z.string(), slug: z.string() }))
 		.handler(async ({ context, input }) => {
 			try {
-				return await agentService.actions.branch({ id: input.id, userId: context.user.id, name: input.name, slug: input.slug });
+				return await agentService.actions.branch({
+					id: input.id,
+					userId: context.user.id,
+					name: input.name,
+					slug: input.slug,
+				});
 			} catch (error) {
 				if (isAgentEnvironmentUnavailable(error)) throwUnavailable();
 				throw error;
@@ -66,13 +71,15 @@ export const actionsRouter = {
 			operationId: "applyAgentResumePatch",
 			summary: "Apply resume patch as agent action",
 		})
-		.input(z.object({
-			resumeId: z.string(),
-			threadId: z.string(),
-			title: z.string(),
-			summary: z.string().optional(),
-			operations: z.array(z.any()),
-		}))
+		.input(
+			z.object({
+				resumeId: z.string(),
+				threadId: z.string(),
+				title: z.string(),
+				summary: z.string().optional(),
+				operations: z.array(z.any()),
+			}),
+		)
 		.handler(async ({ context, input }) => {
 			try {
 				return await agentService.actions.applyPatch({

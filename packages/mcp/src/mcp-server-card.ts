@@ -177,7 +177,10 @@ export function buildMcpServerCard(appVersion: string) {
 					id: resumeId,
 					operations: resumePatchOperationsSchema,
 					threadId: z.string().optional().describe("If patching within an AI agent thread, provide the thread ID."),
-					title: z.string().optional().describe("Short title describing the patch (e.g. 'Add experience'). Required if threadId is provided."),
+					title: z
+						.string()
+						.optional()
+						.describe("Short title describing the patch (e.g. 'Add experience'). Required if threadId is provided."),
 					summary: z.string().optional(),
 				}),
 			),

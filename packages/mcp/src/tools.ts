@@ -390,27 +390,44 @@ export function registerTools(server: McpServer, client: RouterClient<typeof rou
 				id: resumeIdSchema,
 				operations: resumePatchOperationsSchema,
 				threadId: z.string().optional().describe("If patching within an AI agent thread, provide the thread ID."),
-				title: z.string().optional().describe("Short title describing the patch (e.g. 'Add experience'). Required if threadId is provided."),
+				title: z
+					.string()
+					.optional()
+					.describe("Short title describing the patch (e.g. 'Add experience'). Required if threadId is provided."),
 				summary: z.string().optional(),
 			}),
 			annotations: TOOL_ANNOTATIONS[T.patchResume],
 		},
-		withErrorHandling("patching resume", async ({ id, operations, threadId, title, summary }: { id: string; operations: PatchOperation[]; threadId?: string | undefined; title?: string | undefined; summary?: string | undefined }) => {
-			if (threadId) {
-				const result = await client.agent.actions.applyPatch({
-					resumeId: id,
-					threadId,
-					title: title || "MCP Patch",
-					summary,
-					operations,
-				});
-				return text(`Applied ${operations.length} operation(s) via agent action (Action ID: ${result.actionId})`);
-			} else {
+		withErrorHandling(
+			"patching resume",
+			async ({
+				id,
+				operations,
+				threadId,
+				title,
+				summary,
+			}: {
+				id: string;
+				operations: PatchOperation[];
+				threadId?: string | undefined;
+				title?: string | undefined;
+				summary?: string | undefined;
+			}) => {
+				if (threadId) {
+					const result = await client.agent.actions.applyPatch({
+						resumeId: id,
+						threadId,
+						title: title || "MCP Patch",
+						summary,
+						operations,
+					});
+					return text(`Applied ${operations.length} operation(s) via agent action (Action ID: ${result.actionId})`);
+				}
 				const resume = await client.resume.patch({ id, operations });
 				const summaryText = operations.map((op) => `${op.op} ${op.path}`).join(", ");
 				return text(`Applied ${operations.length} operation(s) to "${resume.name}": ${summaryText}`);
-			}
-		}),
+			},
+		),
 	);
 
 	// ── Revert Resume Patch ───────────────────────────────────────
@@ -466,10 +483,13 @@ export function registerTools(server: McpServer, client: RouterClient<typeof rou
 			}),
 			annotations: TOOL_ANNOTATIONS[T.branchResumeFromAction],
 		},
-		withErrorHandling("branching from action", async ({ id, name, slug }: { id: string; name: string; slug: string }) => {
-			const result = await client.agent.actions.branch({ id, name, slug });
-			return text(`Successfully branched to a new resume (ID: ${result.id}).`);
-		}),
+		withErrorHandling(
+			"branching from action",
+			async ({ id, name, slug }: { id: string; name: string; slug: string }) => {
+				const result = await client.agent.actions.branch({ id, name, slug });
+				return text(`Successfully branched to a new resume (ID: ${result.id}).`);
+			},
+		),
 	);
 
 	// ── Update Resume (metadata) ─────────────────────────────────

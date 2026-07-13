@@ -11,7 +11,8 @@ export function isAgentEnvironmentUnavailable(error: unknown) {
 
 export function throwUnavailable(): never {
 	throw new ORPCError("PRECONDITION_FAILED", {
-		message: "AI agent workspace is unavailable because REDIS_URL/ENCRYPTION_SECRET is missing or Redis is unreachable.",
+		message:
+			"AI agent workspace is unavailable because REDIS_URL/ENCRYPTION_SECRET is missing or Redis is unreachable.",
 	});
 }
 
