@@ -1343,5 +1343,61 @@ export const agentService = {
 				throw error;
 			}
 		},
+
+		branch: async (input: { id: string; userId: string; name: string; slug: string }) => {
+			assertAgentEnvironment();
+
+			const [action] = await db
+				.select()
+				.from(schema.agentAction)
+				.where(and(eq(schema.agentAction.id, input.id), eq(schema.agentAction.userId, input.userId)))
+				.limit(1);
+
+			if (!action) throw new ORPCError("NOT_FOUND");
+			if (action.kind !== "resume_patch") {
+				throw new ORPCError("BAD_REQUEST", { message: "Only resume patch actions can be branched." });
+			}
+			const snapshotData = action.snapshotData;
+			if (!snapshotData) {
+				throw new ORPCError("BAD_REQUEST", { message: "This legacy patch does not have a snapshot." });
+			}
+
+			const source = await resumeService.getById({ id: action.resumeId!, userId: input.userId });
+
+			const newId = await resumeService.create({
+				userId: input.userId,
+				name: input.name,
+				slug: input.slug,
+				tags: [...source.tags],
+				locale: source.data.metadata.page.locale as Locale,
+				data: cloneResumeData(snapshotData),
+			});
+
+			return { id: newId };
+		},
+
+		listByResume: async (input: { resumeId: string; userId: string }) => {
+			assertAgentEnvironment();
+
+			const rows = await db
+				.select()
+				.from(schema.agentAction)
+				.where(and(eq(schema.agentAction.resumeId, input.resumeId), eq(schema.agentAction.userId, input.userId)))
+				.orderBy(desc(schema.agentAction.createdAt));
+
+			return rows.map(toAction);
+		},
+
+		applyPatch: async (input: {
+			userId: string;
+			threadId: string;
+			resumeId: string;
+			title: string;
+			summary?: string;
+			operations: JsonPatchOperation[];
+		}) => {
+			assertAgentEnvironment();
+			return await applyResumePatch(input);
+		},
 	},
 };

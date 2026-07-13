@@ -176,9 +176,48 @@ export function buildMcpServerCard(appVersion: string) {
 				z.object({
 					id: resumeId,
 					operations: resumePatchOperationsSchema,
+					threadId: z.string().optional().describe("If patching within an AI agent thread, provide the thread ID."),
+					title: z.string().optional().describe("Short title describing the patch (e.g. 'Add experience'). Required if threadId is provided."),
+					summary: z.string().optional(),
 				}),
 			),
 			annotations: TOOL_ANNOTATIONS[T.patchResume],
+		},
+		{
+			name: T.revertResumePatch,
+			title: "Revert Resume Patch",
+			description: [
+				"Revert a previously applied patch by its agent action ID.",
+				"This restores the resume to its exact state before the action was applied.",
+			].join("\n"),
+			inputSchema: toJsonSchemaCompat(z.object({ id: z.string().describe("The ID of the agent action to revert.") })),
+			annotations: TOOL_ANNOTATIONS[T.revertResumePatch],
+		},
+		{
+			name: T.getResumeHistory,
+			title: "Get Resume History",
+			description: [
+				"List recent AI agent actions applied to this resume.",
+				"Useful for finding action IDs to revert or branch from.",
+			].join("\n"),
+			inputSchema: toJsonSchemaCompat(z.object({ resumeId: resumeId })),
+			annotations: TOOL_ANNOTATIONS[T.getResumeHistory],
+		},
+		{
+			name: T.branchResumeFromAction,
+			title: "Branch Resume From Action",
+			description: [
+				"Create a new resume duplicate based on the state of an older agent action snapshot.",
+				"Useful to explore alternative paths from a specific point in history.",
+			].join("\n"),
+			inputSchema: toJsonSchemaCompat(
+				z.object({
+					id: z.string().describe("The ID of the agent action snapshot to branch from."),
+					name: z.string().min(1).describe("Name for the new branch."),
+					slug: z.string().min(1).describe("URL-friendly slug for the new branch."),
+				}),
+			),
+			annotations: TOOL_ANNOTATIONS[T.branchResumeFromAction],
 		},
 		{
 			name: T.updateResume,

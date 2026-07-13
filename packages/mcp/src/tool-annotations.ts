@@ -59,6 +59,24 @@ export const TOOL_ANNOTATIONS: Record<McpRegisteredToolName, ToolAnnotations> = 
 		idempotentHint: false,
 		openWorldHint: false,
 	},
+	[MCP_TOOL_NAME.revertResumePatch]: {
+		readOnlyHint: false,
+		destructiveHint: true,
+		idempotentHint: false,
+		openWorldHint: false,
+	},
+	[MCP_TOOL_NAME.getResumeHistory]: {
+		readOnlyHint: true,
+		destructiveHint: false,
+		idempotentHint: true,
+		openWorldHint: false,
+	},
+	[MCP_TOOL_NAME.branchResumeFromAction]: {
+		readOnlyHint: false,
+		destructiveHint: false,
+		idempotentHint: false,
+		openWorldHint: false,
+	},
 	[MCP_TOOL_NAME.updateResume]: {
 		readOnlyHint: false,
 		destructiveHint: false,

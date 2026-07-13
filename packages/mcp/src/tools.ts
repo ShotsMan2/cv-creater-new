@@ -389,14 +389,86 @@ export function registerTools(server: McpServer, client: RouterClient<typeof rou
 			inputSchema: z.object({
 				id: resumeIdSchema,
 				operations: resumePatchOperationsSchema,
+				threadId: z.string().optional().describe("If patching within an AI agent thread, provide the thread ID."),
+				title: z.string().optional().describe("Short title describing the patch (e.g. 'Add experience'). Required if threadId is provided."),
+				summary: z.string().optional(),
 			}),
 			annotations: TOOL_ANNOTATIONS[T.patchResume],
 		},
-		withErrorHandling("patching resume", async ({ id, operations }: { id: string; operations: PatchOperation[] }) => {
-			const resume = await client.resume.patch({ id, operations });
-			const summary = operations.map((op) => `${op.op} ${op.path}`).join(", ");
+		withErrorHandling("patching resume", async ({ id, operations, threadId, title, summary }: { id: string; operations: PatchOperation[]; threadId?: string | undefined; title?: string | undefined; summary?: string | undefined }) => {
+			if (threadId) {
+				const result = await client.agent.actions.applyPatch({
+					resumeId: id,
+					threadId,
+					title: title || "MCP Patch",
+					summary,
+					operations,
+				});
+				return text(`Applied ${operations.length} operation(s) via agent action (Action ID: ${result.actionId})`);
+			} else {
+				const resume = await client.resume.patch({ id, operations });
+				const summaryText = operations.map((op) => `${op.op} ${op.path}`).join(", ");
+				return text(`Applied ${operations.length} operation(s) to "${resume.name}": ${summaryText}`);
+			}
+		}),
+	);
 
-			return text(`Applied ${operations.length} operation(s) to "${resume.name}": ${summary}`);
+	// ── Revert Resume Patch ───────────────────────────────────────
+	server.registerTool(
+		T.revertResumePatch,
+		{
+			title: "Revert Resume Patch",
+			description: [
+				"Revert a previously applied patch by its agent action ID.",
+				"This restores the resume to its exact state before the action was applied.",
+			].join("\n"),
+			inputSchema: z.object({ id: z.string().describe("The ID of the agent action to revert.") }),
+			annotations: TOOL_ANNOTATIONS[T.revertResumePatch],
+		},
+		withErrorHandling("reverting patch", async ({ id }: { id: string }) => {
+			const action = await client.agent.actions.revert({ id });
+			return text(`Successfully reverted action "${action.title}". The resume has been restored.`);
+		}),
+	);
+
+	// ── Get Resume History ────────────────────────────────────────
+	server.registerTool(
+		T.getResumeHistory,
+		{
+			title: "Get Resume History",
+			description: [
+				"List recent AI agent actions applied to this resume.",
+				"Useful for finding action IDs to revert or branch from.",
+			].join("\n"),
+			inputSchema: z.object({ resumeId: resumeIdSchema }),
+			annotations: TOOL_ANNOTATIONS[T.getResumeHistory],
+		},
+		withErrorHandling("getting resume history", async ({ resumeId }: { resumeId: string }) => {
+			const actions = await client.agent.actions.listByResume({ resumeId });
+			if (actions.length === 0) return text("No history found for this resume.");
+			return text(JSON.stringify(actions, null, 2));
+		}),
+	);
+
+	// ── Branch Resume From Action ─────────────────────────────────
+	server.registerTool(
+		T.branchResumeFromAction,
+		{
+			title: "Branch Resume From Action",
+			description: [
+				"Create a new resume duplicate based on the state of an older agent action snapshot.",
+				"Useful to explore alternative paths from a specific point in history.",
+			].join("\n"),
+			inputSchema: z.object({
+				id: z.string().describe("The ID of the agent action snapshot to branch from."),
+				name: z.string().min(1).describe("Name for the new branch."),
+				slug: z.string().min(1).describe("URL-friendly slug for the new branch."),
+			}),
+			annotations: TOOL_ANNOTATIONS[T.branchResumeFromAction],
+		},
+		withErrorHandling("branching from action", async ({ id, name, slug }: { id: string; name: string; slug: string }) => {
+			const result = await client.agent.actions.branch({ id, name, slug });
+			return text(`Successfully branched to a new resume (ID: ${result.id}).`);
 		}),
 	);
 
