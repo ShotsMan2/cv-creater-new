@@ -52,8 +52,6 @@ export const Route = createRootRouteWithContext<RouterContext>()({
 				{ rel: "icon", href: "/favicon.ico", type: "image/x-icon", sizes: "128x128" },
 				{ rel: "icon", href: "/favicon.svg", type: "image/svg+xml", sizes: "256x256 any" },
 				{ rel: "apple-touch-icon", href: "/apple-touch-icon-180x180.png", type: "image/png", sizes: "180x180 any" },
-				// Manifest
-				{ rel: "manifest", href: "/manifest.webmanifest", crossOrigin: "use-credentials" },
 			],
 			meta: [
 				{ title },
@@ -63,10 +61,6 @@ export const Route = createRootRouteWithContext<RouterContext>()({
 				// Meta Tags
 				{ name: "theme-color", content: "#09090B" },
 				{ name: "application-name", content: "Reactive Resume" },
-				{ name: "mobile-web-app-capable", content: "yes" },
-				{ name: "apple-mobile-web-app-capable", content: "yes" },
-				{ name: "apple-mobile-web-app-title", content: "Reactive Resume" },
-				{ name: "apple-mobile-web-app-status-bar-style", content: "black-translucent" },
 				// Twitter Tags
 				{ property: "twitter:image", content: `${appUrl}/opengraph/banner.jpg` },
 				{ property: "twitter:card", content: "summary_large_image" },
