@@ -1,5 +1,6 @@
 import type { AIProvider } from "@reactive-resume/ai/types";
 import type { ToolSet } from "ai";
+import { createGoogleGenerativeAI } from "@ai-sdk/google";
 import { createOpenAI } from "@ai-sdk/openai";
 import { tool } from "ai";
 import z from "zod";
@@ -31,6 +32,19 @@ type BuildAgentToolsInput = {
 };
 
 function buildProviderNativeAgentTools(provider: AgentProviderConfig): ToolSet {
+	if (provider.provider === "gemini") {
+		const google = createGoogleGenerativeAI({
+			apiKey: provider.apiKey,
+			...(provider.baseURL ? { baseURL: provider.baseURL } : {}),
+		});
+
+		if (google.tools && typeof google.tools.googleSearch === "function") {
+			return {
+				web_search: google.tools.googleSearch({}),
+			};
+		}
+	}
+
 	if (!supportsProviderNativeWebSearch(provider)) return {};
 
 	const openai = createOpenAI({
