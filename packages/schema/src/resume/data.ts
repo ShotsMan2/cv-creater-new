@@ -1,4 +1,5 @@
 import z from "zod";
+import { generateId } from "@reactive-resume/utils/string";
 import { templateSchema } from "../templates";
 
 export const iconSchema = z
@@ -15,8 +16,11 @@ export const iconColorSchema = z
 	);
 
 export const websiteSchema = z.object({
-	url: z.string().describe("The URL to show as a link. Must be a valid URL with a protocol (http:// or https://)."),
-	label: z.string().describe("The label to display for the URL. Leave blank to display the URL as-is."),
+	url: z
+		.string()
+		.catch("")
+		.describe("The URL to show as a link. Must be a valid URL with a protocol (http:// or https://)."),
+	label: z.string().catch("").describe("The label to display for the URL. Leave blank to display the URL as-is."),
 });
 
 export const itemWebsiteSchema = websiteSchema
@@ -76,7 +80,10 @@ export const pictureSchema = z.object({
 });
 
 export const customFieldSchema = z.object({
-	id: z.string().describe("The unique identifier for the custom field. Usually generated as a UUID."),
+	id: z
+		.string()
+		.catch(() => generateId())
+		.describe("The unique identifier for the custom field. Usually generated as a UUID."),
 	icon: iconSchema,
 	text: z.string().describe("The text to display for the custom field."),
 	link: z.string().describe("If the custom field should be a link, the URL to link to.").catch(""),
@@ -106,8 +113,11 @@ export const summarySchema = z.object({
 });
 
 export const baseItemSchema = z.object({
-	id: z.string().describe("The unique identifier for the item. Usually generated as a UUID."),
-	hidden: z.boolean().describe("Whether to hide the item from the resume."),
+	id: z
+		.string()
+		.catch(() => generateId())
+		.describe("The unique identifier for the item. Usually generated as a UUID."),
+	hidden: z.boolean().catch(false).describe("Whether to hide the item from the resume."),
 });
 
 export const summaryItemSchema = baseItemSchema.extend({
@@ -133,12 +143,12 @@ export const certificationItemSchema = baseItemSchema.extend({
 });
 
 export const educationItemSchema = baseItemSchema.extend({
-	school: z.string().min(1).describe("The name of the school or institution."),
-	degree: z.string().describe("The degree or qualification obtained."),
+	school: z.string().min(1).catch("").describe("The name of the school or institution."),
+	degree: z.string().catch("").describe("The degree or qualification obtained."),
 	area: z.string().describe("The area of study or specialization."),
-	grade: z.string().describe("The grade or score achieved."),
-	location: z.string().describe("The location of the school or institution."),
-	period: z.string().describe("The period of time the education was obtained over."),
+	grade: z.string().catch("").describe("The grade or score achieved."),
+	location: z.string().catch("").describe("The location of the school or institution."),
+	period: z.string().catch("").describe("The period of time the education was obtained over."),
 	website: itemWebsiteSchema.describe("The website of the school or institution, if any."),
 	description: z.string().describe("The description of the education. This should be a HTML-formatted string."),
 });
@@ -153,15 +163,17 @@ export const roleItemSchema = z.object({
 export type RoleItem = z.infer<typeof roleItemSchema>;
 
 export const experienceItemSchema = baseItemSchema.extend({
-	company: z.string().min(1).describe("The name of the company or organization."),
+	company: z.string().min(1).catch("").describe("The name of the company or organization."),
 	position: z
 		.string()
+		.catch("")
 		.describe(
 			"The position held at the company or organization. Used when there is only a single role. If multiple roles are provided in the 'roles' field, this serves as a summary title or can be left blank.",
 		),
-	location: z.string().describe("The location of the company or organization."),
+	location: z.string().catch("").describe("The location of the company or organization."),
 	period: z
 		.string()
+		.catch("")
 		.describe(
 			"The overall period of time at the company. When multiple roles are used, this should reflect the total tenure.",
 		),
@@ -238,9 +250,10 @@ export const referenceItemSchema = baseItemSchema.extend({
 export const skillItemSchema = baseItemSchema.extend({
 	icon: iconSchema,
 	iconColor: iconColorSchema,
-	name: z.string().min(1).describe("The name of the skill."),
+	name: z.string().min(1).catch("").describe("The name of the skill."),
 	proficiency: z
 		.string()
+		.catch("")
 		.describe(
 			"The proficiency level of the skill. Can be any text, such as 'Beginner', 'Intermediate', 'Advanced', etc.",
 		),

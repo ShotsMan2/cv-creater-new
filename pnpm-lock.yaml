@@ -1003,6 +1003,9 @@ importers:
 
   packages/schema:
     dependencies:
+      '@reactive-resume/utils':
+        specifier: workspace:*
+        version: link:../utils
       zod:
         specifier: ^4.4.3
         version: 4.4.3

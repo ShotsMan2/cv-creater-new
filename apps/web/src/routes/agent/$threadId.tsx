@@ -854,7 +854,7 @@ function AgentChatMessages({
 		}, 100);
 		return () => clearTimeout(timeoutId);
 		// biome-ignore lint/correctness/useExhaustiveDependencies: We intentionally want to auto-scroll when these values change
-	}, [messages, isStreaming]);
+	}, []);
 
 	return (
 		<ScrollArea className="min-h-0 flex-1">

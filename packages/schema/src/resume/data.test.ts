@@ -36,12 +36,12 @@ describe("websiteSchema", () => {
 		expect(websiteSchema.safeParse({ url: "https://example.com", label: "Example" }).success).toBe(true);
 	});
 
-	it("rejects missing url", () => {
-		expect(websiteSchema.safeParse({ label: "Example" }).success).toBe(false);
+	it("catches missing url", () => {
+		expect(websiteSchema.safeParse({ label: "Example" }).data?.url).toBe("");
 	});
 
-	it("rejects missing label", () => {
-		expect(websiteSchema.safeParse({ url: "https://example.com" }).success).toBe(false);
+	it("catches missing label", () => {
+		expect(websiteSchema.safeParse({ url: "https://example.com" }).data?.label).toBe("");
 	});
 
 	it("allows empty strings (caller decides display)", () => {
@@ -108,8 +108,10 @@ describe("customFieldSchema", () => {
 		expect(result.success).toBe(true);
 	});
 
-	it("rejects missing id", () => {
-		expect(customFieldSchema.safeParse({ icon: "phone", text: "555-0000", link: "" }).success).toBe(false);
+	it("catches missing id with generated id", () => {
+		const result = customFieldSchema.safeParse({ icon: "phone", text: "555-0000", link: "" });
+		expect(result.success).toBe(true);
+		if (result.success) expect(typeof result.data.id).toBe("string");
 	});
 
 	it("falls back to empty link via .catch when missing", () => {
@@ -120,11 +122,10 @@ describe("customFieldSchema", () => {
 });
 
 describe("experienceItemSchema", () => {
-	it("requires company name (min 1)", () => {
+	it("catches missing company name with empty string", () => {
 		const result = experienceItemSchema.safeParse({
 			id: "abcdef0123456789",
 			hidden: false,
-			company: "",
 			position: "Engineer",
 			location: "",
 			period: "",
@@ -132,7 +133,8 @@ describe("experienceItemSchema", () => {
 			description: "",
 			roles: [],
 		});
-		expect(result.success).toBe(false);
+		expect(result.success).toBe(true);
+		if (result.success) expect(result.data.company).toBe("");
 	});
 
 	it("validates a complete experience item", () => {
@@ -167,18 +169,19 @@ describe("experienceItemSchema", () => {
 });
 
 describe("skillItemSchema", () => {
-	it("requires name (min 1)", () => {
+	it("catches missing name with empty string", () => {
 		const invalid = {
 			id: "x",
 			hidden: false,
 			icon: "",
 			iconColor: "",
-			name: "",
 			proficiency: "",
 			level: 4,
 			keywords: [],
 		};
-		expect(skillItemSchema.safeParse(invalid).success).toBe(false);
+		const result = skillItemSchema.safeParse(invalid);
+		expect(result.success).toBe(true);
+		if (result.success) expect(result.data.name).toBe("");
 	});
 
 	it("clamps invalid level via .catch(0)", () => {
