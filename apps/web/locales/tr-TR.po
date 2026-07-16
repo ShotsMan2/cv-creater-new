@@ -3901,7 +3901,7 @@ msgstr "OpenAI ile çalışın"
 
 #: src/routes/agent/$threadId.tsx
 msgid "Working…"
-msgstr "Çalışmakta…"
+msgstr "burada çalışıyor"
 
 #: src/routes/_home/-sections/footer.tsx
 msgid "X (Twitter)"
