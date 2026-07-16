@@ -185,7 +185,9 @@ export function NewThreadSetup({ resumeId }: NewThreadSetupProps) {
 									onError: (error) => {
 										const msg = error instanceof Error ? error.message : "";
 										if (msg.includes("AI_PROVIDER_DECRYPTION_FAILED")) {
-											toast.error(t`Failed to decrypt the AI provider's API key. Please update the API key in settings.`);
+											toast.error(
+												t`Failed to decrypt the AI provider's API key. Please update the API key in settings.`,
+											);
 										} else {
 											toast.error(
 												getOrpcErrorMessage(error, {

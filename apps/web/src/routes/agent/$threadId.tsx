@@ -106,6 +106,7 @@ type AgentChatProps = {
 	actions: AgentAction[];
 	onToggleThreads?: () => void;
 	onToggleResume?: () => void;
+	isThreadsCollapsed?: boolean;
 };
 
 type AgentChatReadOnlyBannerProps = {
@@ -136,6 +137,7 @@ type AgentChatHeaderProps = {
 	onDelete: () => void;
 	onToggleResume?: () => void;
 	onToggleThreads?: () => void;
+	isThreadsCollapsed?: boolean;
 };
 
 type AgentChatComposerProps = {
@@ -507,7 +509,7 @@ function ChatMessage({ message, onAnswer, onRevert, isReverting, actionsById }: 
 				className={cn(
 					"space-y-3 text-sm",
 					isUser
-						? "max-w-[86%] rounded-md bg-primary px-4 py-3 text-primary-foreground"
+						? "max-w-[86%] rounded-md border border-border bg-[#171717] px-4 py-3 text-white"
 						: "w-full max-w-full py-1 text-foreground",
 				)}
 			>
@@ -537,6 +539,7 @@ function AgentChat({
 	actions,
 	onToggleThreads,
 	onToggleResume,
+	isThreadsCollapsed,
 }: AgentChatProps) {
 	const queryClient = useQueryClient();
 	const navigate = useNavigate();
@@ -783,6 +786,7 @@ function AgentChat({
 				onDelete={() => void handleDelete()}
 				onToggleResume={onToggleResume}
 				onToggleThreads={onToggleThreads}
+				isThreadsCollapsed={isThreadsCollapsed}
 			/>
 
 			<AgentChatReadOnlyBanner isReadOnly={isReadOnly} readOnlyReason={readOnlyReason} />
@@ -842,6 +846,16 @@ function AgentChatMessages({
 	onRetry,
 	onStarterSelect,
 }: AgentChatMessagesProps) {
+	const bottomRef = useRef<HTMLDivElement>(null);
+
+	useEffect(() => {
+		const timeoutId = setTimeout(() => {
+			bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+		}, 100);
+		return () => clearTimeout(timeoutId);
+		// biome-ignore lint/correctness/useExhaustiveDependencies: We intentionally want to auto-scroll when these values change
+	}, []);
+
 	return (
 		<ScrollArea className="min-h-0 flex-1">
 			<div className="mx-auto flex max-w-3xl flex-col gap-4 p-4">
@@ -885,6 +899,8 @@ function AgentChatMessages({
 						) : null}
 					</div>
 				) : null}
+
+				<div ref={bottomRef} className="h-0 w-full" />
 			</div>
 		</ScrollArea>
 	);
@@ -900,11 +916,12 @@ function AgentChatHeader({
 	onDelete,
 	onToggleResume,
 	onToggleThreads,
+	isThreadsCollapsed,
 }: AgentChatHeaderProps) {
 	return (
 		<div className="flex h-14 shrink-0 items-center justify-between border-b px-4">
 			<div className="flex min-w-0 items-center gap-2">
-				{onToggleThreads ? (
+				{onToggleThreads && isThreadsCollapsed ? (
 					<Button size="icon-sm" variant="ghost" onClick={onToggleThreads}>
 						<SidebarSimpleIcon />
 						<span className="sr-only">
@@ -1294,7 +1311,11 @@ function RouteComponent() {
 						collapsedSize="0px"
 						onResize={(size) => setIsThreadsCollapsed(size.inPixels < 24)}
 					>
-						<AgentThreadSidebar activeThreadId={threadId} className={cn(isThreadsCollapsed && "invisible")} />
+						<AgentThreadSidebar
+							activeThreadId={threadId}
+							className={cn(isThreadsCollapsed && "invisible")}
+							onToggleThreads={toggleThreadsPanel}
+						/>
 					</ResizablePanel>
 					<ResizableSeparator withHandle />
 					<ResizablePanel id="chat" defaultSize="52%" minSize="280px">
@@ -1308,6 +1329,7 @@ function RouteComponent() {
 							actions={data.actions}
 							onToggleThreads={toggleThreadsPanel}
 							onToggleResume={toggleResumePanel}
+							isThreadsCollapsed={isThreadsCollapsed}
 						/>
 					</ResizablePanel>
 					<ResizableSeparator withHandle />

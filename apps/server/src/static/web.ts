@@ -86,7 +86,10 @@ export async function handleWebApp(request: Request) {
 		return new Response(html, { headers });
 	} catch (error) {
 		if ((error as NodeJS.ErrnoException).code === "ENOENT") {
-			return new Response("Web app is not built. If you are running locally, access it through the Vite dev server (usually port 3003/3000).", { status: 404, headers: { "Content-Type": "text/plain" } });
+			return new Response(
+				"Web app is not built. If you are running locally, access it through the Vite dev server (usually port 3003/3000).",
+				{ status: 404, headers: { "Content-Type": "text/plain" } },
+			);
 		}
 		throw error;
 	}

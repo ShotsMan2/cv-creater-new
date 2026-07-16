@@ -18,6 +18,7 @@
 		"test:agent": "vitest run --reporter=agent --reporter=json --outputFile.json=reports/vitest-results.json --passWithNoTests"
 	},
 	"dependencies": {
+		"@reactive-resume/utils": "workspace:*",
 		"zod": "^4.4.3"
 	},
 	"devDependencies": {

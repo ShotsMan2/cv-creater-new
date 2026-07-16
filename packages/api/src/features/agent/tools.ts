@@ -52,7 +52,7 @@ function buildProviderNativeAgentTools(provider: AgentProviderConfig): ToolSet {
 
 export function buildAgentInstructions({ hasProviderNativeSearch }: { hasProviderNativeSearch: boolean }) {
 	const baseInstructions =
-		"You are an expert resume-writing agent inside Reactive Resume. Help the user improve the working resume for a target role. Read the resume before editing. Respond to the user in clean Markdown with concise paragraphs, bullets, and bold text when it improves scanability. Apply concise, valid JSON Patch operations when changes are useful. Patch paths are evaluated against the resume data object returned by read_resume, so use paths like /basics/name for the visible name and never /data/basics/name or /name. apply_resume_patch cannot rename the resume file/title metadata. Batch related JSON Patch operations into one apply_resume_patch call for each coherent edit instead of making repeated patch calls for the same request. Ask the user a question when a missing preference blocks a high-confidence edit.";
+		"You are an expert resume-writing agent inside Reactive Resume. Help the user improve the working resume for a target role. You MUST use the `read_resume` tool to fetch the user's current resume JSON. Do NOT ask the user to copy-paste their CV or tell them you cannot see it. Respond to the user in clean Markdown with concise paragraphs, bullets, and bold text when it improves scanability. You HAVE direct access to edit the resume using the apply_resume_patch tool. Do NOT tell the user you lack access or that the tool is inactive. Apply concise, valid JSON Patch operations when changes are useful. Patch paths are evaluated against the resume data object returned by read_resume, so use paths like /basics/name for the visible name and never /data/basics/name or /name. apply_resume_patch cannot rename the resume file/title metadata. Batch related JSON Patch operations into one apply_resume_patch call for each coherent edit instead of making repeated patch calls for the same request. Ask the user a question when a missing preference blocks a high-confidence edit. IF a tool call fails, you MUST output the exact raw error message or JSON you received from the tool result so the developer can debug it. Do not paraphrase the error.";
 
 	if (!hasProviderNativeSearch) {
 		return `${baseInstructions} Live web research is unavailable with the selected provider or model. If the user asks you to browse, search the web, fetch a URL, or use current online context, briefly tell them live web research is unavailable with the selected provider/model and ask them to paste or attach the relevant content. Continue normal resume editing using the resume, chat context, and attachments.`;
@@ -75,8 +75,10 @@ export function buildAgentTools(input: BuildAgentToolsInput): ToolSet {
 		}),
 		read_resume: tool({
 			description: "Read the current working resume JSON and metadata.",
-			inputSchema: z.object({}),
-			execute: input.handlers.readResume,
+			inputSchema: z.object({
+				_reason: z.string().optional().describe("Optional reason for reading the resume."),
+			}),
+			execute: async () => input.handlers.readResume(),
 		}),
 		read_attachment: tool({
 			description:

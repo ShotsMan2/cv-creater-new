@@ -5,15 +5,18 @@ import { Trans } from "@lingui/react/macro";
 import {
 	ArchiveIcon,
 	ArrowLeftIcon,
+	CaretUpIcon,
 	ChatCircleDotsIcon,
 	DotsThreeVerticalIcon,
 	PlusIcon,
+	SidebarSimpleIcon,
 	TrashIcon,
 } from "@phosphor-icons/react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useMemo } from "react";
 import { toast } from "sonner";
+import { Avatar, AvatarFallback, AvatarImage } from "@reactive-resume/ui/components/avatar";
 import { Button } from "@reactive-resume/ui/components/button";
 import {
 	DropdownMenu,
@@ -22,7 +25,9 @@ import {
 	DropdownMenuTrigger,
 } from "@reactive-resume/ui/components/dropdown-menu";
 import { ScrollArea } from "@reactive-resume/ui/components/scroll-area";
+import { getInitials } from "@reactive-resume/utils/string";
 import { cn } from "@reactive-resume/utils/style";
+import { UserDropdownMenu } from "@/features/user/dropdown-menu";
 import { useConfirm } from "@/hooks/use-confirm";
 import { getOrpcErrorMessage } from "@/libs/error-message";
 import { orpc } from "@/libs/orpc/client";
@@ -38,6 +43,7 @@ type ThreadRowProps = ThreadActionsProps;
 
 type AgentThreadSidebarProps = {
 	activeThreadId?: string | null;
+	onToggleThreads?: () => void;
 	className?: string;
 };
 
@@ -172,7 +178,7 @@ function ThreadRow({ thread, activeThreadId }: ThreadRowProps) {
 	);
 }
 
-export function AgentThreadSidebar({ activeThreadId = null, className }: AgentThreadSidebarProps) {
+export function AgentThreadSidebar({ activeThreadId = null, onToggleThreads, className }: AgentThreadSidebarProps) {
 	const { data: threads, isLoading } = useQuery(orpc.agent.threads.list.queryOptions());
 
 	return (
@@ -184,12 +190,14 @@ export function AgentThreadSidebar({ activeThreadId = null, className }: AgentTh
 						<Trans>Threads</Trans>
 					</div>
 				</div>
-				<Button size="icon-sm" variant="ghost" nativeButton={false} render={<Link to="/dashboard/resumes" />}>
-					<ArrowLeftIcon />
-					<span className="sr-only">
-						<Trans>Back to resumes</Trans>
-					</span>
-				</Button>
+				{onToggleThreads && (
+					<Button size="icon-sm" variant="ghost" onClick={onToggleThreads}>
+						<SidebarSimpleIcon />
+						<span className="sr-only">
+							<Trans>Toggle threads</Trans>
+						</span>
+					</Button>
+				)}
 			</div>
 
 			<ScrollArea className="min-h-0 flex-1">
@@ -221,6 +229,41 @@ export function AgentThreadSidebar({ activeThreadId = null, className }: AgentTh
 					))}
 				</div>
 			</ScrollArea>
+
+			<div className="flex shrink-0 flex-col gap-y-1.5 border-t p-2">
+				<Button
+					variant="ghost"
+					className="w-full justify-start gap-2 text-muted-foreground hover:text-foreground"
+					nativeButton={false}
+					render={<Link to="/dashboard/resumes" />}
+				>
+					<ArrowLeftIcon />
+					<span>
+						<Trans>Back to resumes</Trans>
+					</span>
+				</Button>
+
+				<UserDropdownMenu>
+					{({ session }) => (
+						<button
+							type="button"
+							className="flex w-full items-center gap-x-3 rounded-md p-2 text-start text-sm outline-hidden transition-colors hover:bg-accent hover:text-accent-foreground"
+						>
+							<Avatar className="size-8 shrink-0">
+								<AvatarImage src={session.user.image ?? undefined} />
+								<AvatarFallback>{getInitials(session.user.name)}</AvatarFallback>
+							</Avatar>
+
+							<div className="min-w-0 flex-1">
+								<p className="truncate font-semibold leading-none">{session.user.name}</p>
+								<p className="mt-1 truncate text-muted-foreground text-xs leading-none">{session.user.email}</p>
+							</div>
+
+							<CaretUpIcon className="ml-auto size-4 shrink-0 opacity-60" />
+						</button>
+					)}
+				</UserDropdownMenu>
+			</div>
 		</aside>
 	);
 }
