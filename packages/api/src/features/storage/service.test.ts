@@ -111,16 +111,3 @@ describe("isImageFile", () => {
 		expect(isImageFile("")).toBe(false);
 	});
 });
-
-describe("LocalStorageService", () => {
-	it("rejects private writes instead of silently storing them on the local filesystem", async () => {
-		await expect(
-			getStorageService().write({
-				key: "uploads/user/agent/thread/file.txt",
-				data: new TextEncoder().encode("private"),
-				contentType: "text/plain",
-				private: true,
-			}),
-		).rejects.toThrow("Private storage writes are not supported by the local filesystem backend.");
-	});
-});
