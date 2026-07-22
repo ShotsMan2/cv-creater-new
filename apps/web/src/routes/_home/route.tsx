@@ -19,7 +19,7 @@ function RouteComponent() {
 			</a>
 
 			<Header />
-			
+
 			<AnimatePresence mode="wait">
 				<m.main
 					key={router.state.location.pathname}

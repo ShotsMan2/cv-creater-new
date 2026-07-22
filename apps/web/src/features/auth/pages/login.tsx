@@ -17,7 +17,7 @@ import { SocialAuth } from "../components/social-auth";
 
 const formSchema = z.object({
 	identifier: z.string().trim().toLowerCase(),
-	password: z.string().trim().min(6).max(64),
+	password: z.string().trim().min(8).max(64),
 });
 
 type Props = {
@@ -191,7 +191,7 @@ export function LoginPage({ disableEmailAuth, disableSignups }: Props) {
 									<FormControl
 										render={
 											<Input
-												min={6}
+												min={8}
 												max={64}
 												type={showPassword ? "text" : "password"}
 												autoComplete="section-login current-password"

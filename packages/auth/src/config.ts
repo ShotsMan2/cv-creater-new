@@ -182,6 +182,10 @@ const getAuthConfig = () => {
 					type: "string",
 					required: true,
 				},
+				displayUsername: {
+					type: "string",
+					required: true,
+				},
 			},
 		},
 

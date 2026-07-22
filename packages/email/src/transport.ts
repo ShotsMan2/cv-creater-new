@@ -50,8 +50,13 @@ export const sendEmail = async (options: SendEmailOptions) => {
 	};
 
 	if (options.react) {
-		payload.html = await render(options.react);
-		payload.text = options.text ?? (await render(options.react, { plainText: true }));
+		try {
+			payload.html = await render(options.react);
+			payload.text = options.text ?? (await render(options.react, { plainText: true }));
+		} catch (error) {
+			console.error("Failed to render email template.", error);
+			return;
+		}
 	}
 
 	if (!payload.text && !payload.html) return;

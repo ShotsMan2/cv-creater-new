@@ -20,12 +20,10 @@ export const relations = defineRelations(schema, (r) => ({
 		oauthConsents: r.many.oauthConsent(),
 		ownedWorkspaces: r.many.workspace(),
 		workspaceMemberships: r.many.workspaceMember({
-			from: r.user.id,
-			to: r.workspaceMember.userId,
+			alias: "workspaceMember_user",
 		}),
 		workspaceInvitesSent: r.many.workspaceInvite({
-			from: r.user.id,
-			to: r.workspaceInvite.invitedBy,
+			alias: "workspaceInvite_inviter",
 		}),
 		auditLogs: r.many.auditLog(),
 		aiTokenQuotas: r.many.aiTokenQuota(),
@@ -80,12 +78,10 @@ export const relations = defineRelations(schema, (r) => ({
 			to: r.resumeAnalysis.resumeId,
 		}),
 		sourceAgentThreads: r.many.agentThread({
-			from: r.resume.id,
-			to: r.agentThread.sourceResumeId,
+			alias: "sourceAgentThread_resume",
 		}),
 		workingAgentThreads: r.many.agentThread({
-			from: r.resume.id,
-			to: r.agentThread.workingResumeId,
+			alias: "workingAgentThread_resume",
 		}),
 		agentActions: r.many.agentAction({
 			from: r.resume.id,
@@ -126,10 +122,12 @@ export const relations = defineRelations(schema, (r) => ({
 		sourceResume: r.one.resume({
 			from: r.agentThread.sourceResumeId,
 			to: r.resume.id,
+			alias: "sourceAgentThread_resume",
 		}),
 		workingResume: r.one.resume({
 			from: r.agentThread.workingResumeId,
 			to: r.resume.id,
+			alias: "workingAgentThread_resume",
 		}),
 		messages: r.many.agentMessage(),
 		attachments: r.many.agentAttachment(),
@@ -252,10 +250,12 @@ export const relations = defineRelations(schema, (r) => ({
 		user: r.one.user({
 			from: r.workspaceMember.userId,
 			to: r.user.id,
+			alias: "workspaceMember_user",
 		}),
 		inviter: r.one.user({
 			from: r.workspaceMember.invitedBy,
 			to: r.user.id,
+			alias: "workspaceMember_inviter",
 		}),
 	},
 	workspaceInvite: {
@@ -266,6 +266,7 @@ export const relations = defineRelations(schema, (r) => ({
 		inviter: r.one.user({
 			from: r.workspaceInvite.invitedBy,
 			to: r.user.id,
+			alias: "workspaceInvite_inviter",
 		}),
 	},
 	auditLog: {

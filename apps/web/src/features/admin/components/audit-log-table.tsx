@@ -107,27 +107,42 @@ export function AuditLogTable({ workspaceId: _workspaceId }: { workspaceId?: str
 	const paginated = result ?? [];
 	const totalItems = result?.length ?? 0;
 	const totalPages = Math.ceil(totalItems / limit);
-	
+
 	// Actions are normally dynamic, but without a specific endpoint for them we can just list standard ones or leave it empty,
 	// or we can just fetch some predefined ones. For now, let's just keep the filter input without all options or use a predefined list.
-	const uniqueActions = ["user.login", "user.register", "resume.create", "resume.update", "resume.delete", "workspace.create", "workspace.update", "workspace.delete"];
+	const uniqueActions = [
+		"user.login",
+		"user.register",
+		"resume.create",
+		"resume.update",
+		"resume.delete",
+		"workspace.create",
+		"workspace.update",
+		"workspace.delete",
+	];
 
 	return (
 		<div className="space-y-4">
 			<div className="flex items-center gap-x-3">
-				<div className="relative flex-1 max-w-sm">
+				<div className="relative max-w-sm flex-1">
 					<MagnifyingGlassIcon className="absolute start-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
 					<Input
 						placeholder={t`Search audit log...`}
 						value={search}
-						onChange={(e) => { setSearch(e.target.value); setPage(1); }}
+						onChange={(e) => {
+							setSearch(e.target.value);
+							setPage(1);
+						}}
 						className="ps-9"
 					/>
 				</div>
 				<select
 					className="rounded-md border bg-background px-3 py-2 text-sm"
 					value={actionFilter ?? ""}
-					onChange={(e) => { setActionFilter(e.target.value || undefined); setPage(1); }}
+					onChange={(e) => {
+						setActionFilter(e.target.value || undefined);
+						setPage(1);
+					}}
 				>
 					<option value="">{t`All actions`}</option>
 					{uniqueActions.map((action: string) => (
@@ -158,14 +173,15 @@ export function AuditLogTable({ workspaceId: _workspaceId }: { workspaceId?: str
 				</CardContent>
 				{totalPages > 1 && (
 					<div className="flex items-center justify-between border-t p-4">
-						<p className="text-xs text-muted-foreground">
-							{t`Showing`} {(page - 1) * limit + 1} {t`to`} {Math.min(page * limit, totalItems)} {t`of`} {totalItems} {t`entries`}
+						<p className="text-muted-foreground text-xs">
+							{t`Showing`} {(page - 1) * limit + 1} {t`to`} {Math.min(page * limit, totalItems)} {t`of`} {totalItems}{" "}
+							{t`entries`}
 						</p>
 						<div className="flex items-center gap-x-2">
-							<Button variant="outline" size="sm" disabled={page === 1} onClick={() => setPage(p => p - 1)}>
+							<Button variant="outline" size="sm" disabled={page === 1} onClick={() => setPage((p) => p - 1)}>
 								{t`Previous`}
 							</Button>
-							<Button variant="outline" size="sm" disabled={page === totalPages} onClick={() => setPage(p => p + 1)}>
+							<Button variant="outline" size="sm" disabled={page === totalPages} onClick={() => setPage((p) => p + 1)}>
 								{t`Next`}
 							</Button>
 						</div>

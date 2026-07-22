@@ -41,7 +41,7 @@ function RouteComponent() {
 						animate={{ opacity: 1, y: 0 }}
 						exit={{ opacity: 0, y: -15 }}
 						transition={{ duration: 0.3, ease: "easeOut" }}
-						className="h-full flex flex-col"
+						className="flex h-full flex-col"
 					>
 						<Outlet />
 					</m.div>

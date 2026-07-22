@@ -26,7 +26,7 @@ const formSchema = z.object({
 			message: "Username can only contain lowercase letters, numbers, dots, hyphens and underscores.",
 		}),
 	email: z.email().toLowerCase(),
-	password: z.string().min(6).max(64),
+	password: z.string().min(8).max(64),
 });
 
 type Props = {
@@ -200,7 +200,7 @@ export function RegisterPage({ disableEmailAuth }: Props) {
 									<FormControl
 										render={
 											<Input
-												min={6}
+												min={8}
 												max={64}
 												type={showPassword ? "text" : "password"}
 												autoComplete="section-register new-password"
