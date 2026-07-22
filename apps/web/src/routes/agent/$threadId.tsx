@@ -853,7 +853,6 @@ function AgentChatMessages({
 			bottomRef.current?.scrollIntoView({ behavior: "smooth" });
 		}, 100);
 		return () => clearTimeout(timeoutId);
-		// biome-ignore lint/correctness/useExhaustiveDependencies: We intentionally want to auto-scroll when these values change
 	}, []);
 
 	return (

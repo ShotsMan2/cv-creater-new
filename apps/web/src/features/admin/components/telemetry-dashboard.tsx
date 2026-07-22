@@ -16,7 +16,7 @@ function MetricCard({
 	timestamp,
 	loading,
 }: {
-	icon: React.ComponentType<{ weight?: string; className?: string }>;
+	icon: React.ComponentType<import("@phosphor-icons/react").IconProps>;
 	title: string;
 	value: string | number | undefined;
 	unit?: string;

@@ -11,10 +11,13 @@ import { storageRouter } from "../features/storage/router";
 import { telemetryRouter } from "../features/telemetry/router";
 import { workspaceRouter } from "../features/workspace/router";
 
+import { adminRouter } from "../features/admin/router";
+
 export default {
 	ai: aiRouter,
 	aiProviders: aiProvidersRouter,
 	agent: agentRouter,
+	admin: adminRouter,
 	audit: auditRouter,
 	auth: authRouter,
 	flags: flagsRouter,

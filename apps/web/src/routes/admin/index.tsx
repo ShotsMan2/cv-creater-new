@@ -3,6 +3,7 @@ import { GaugeIcon } from "@phosphor-icons/react";
 import { createFileRoute } from "@tanstack/react-router";
 import { Separator } from "@reactive-resume/ui/components/separator";
 import { TelemetryDashboard } from "@/features/admin/components/telemetry-dashboard";
+import { TelemetryCharts } from "@/features/admin/components/telemetry-charts";
 import { DashboardHeader } from "../dashboard/-components/header";
 
 export const Route = createFileRoute("/admin/")({
@@ -15,6 +16,7 @@ function RouteComponent() {
 			<DashboardHeader icon={GaugeIcon} title={t`Admin Dashboard`} />
 			<Separator />
 			<TelemetryDashboard />
+			<TelemetryCharts />
 		</div>
 	);
 }

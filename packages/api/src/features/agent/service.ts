@@ -1361,8 +1361,11 @@ export const agentService = {
 			if (!snapshotData) {
 				throw new ORPCError("BAD_REQUEST", { message: "This legacy patch does not have a snapshot." });
 			}
+			if (!action.resumeId) {
+				throw new ORPCError("BAD_REQUEST", { message: "This legacy patch does not have a resumeId." });
+			}
 
-			const source = await resumeService.getById({ id: action.resumeId!, userId: input.userId });
+			const source = await resumeService.getById({ id: action.resumeId, userId: input.userId });
 
 			const newId = await resumeService.create({
 				userId: input.userId,

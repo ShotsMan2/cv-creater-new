@@ -2,7 +2,7 @@ import type { MessageDescriptor } from "@lingui/core";
 import { msg } from "@lingui/core/macro";
 import { useLingui } from "@lingui/react";
 import { Trans } from "@lingui/react/macro";
-import { BuildingsIcon, GaugeIcon, ScrollIcon } from "@phosphor-icons/react";
+import { Buildings as BuildingsIcon, Gauge as GaugeIcon, Scroll as ScrollIcon, Users } from "@phosphor-icons/react";
 import { Link } from "@tanstack/react-router";
 import { Avatar, AvatarFallback, AvatarImage } from "@reactive-resume/ui/components/avatar";
 import { BrandIcon } from "@reactive-resume/ui/components/brand-icon";
@@ -36,9 +36,14 @@ const adminSidebarItems = [
 		href: "/admin",
 	},
 	{
+		icon: <Users />,
+		label: msg`Users`,
+		href: "/admin/users",
+	},
+	{
 		icon: <ScrollIcon />,
-		label: msg`Audit Log`,
-		href: "/admin/audit",
+		label: msg`Audit Logs`,
+		href: "/admin/audit-logs",
 	},
 	{
 		icon: <GaugeIcon />,

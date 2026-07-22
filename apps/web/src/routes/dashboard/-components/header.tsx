@@ -10,10 +10,10 @@ type Props = {
 
 export function DashboardHeader({ title, icon: IconComponent, className }: Props) {
 	return (
-		<div className={cn("relative flex items-center justify-center gap-x-2.5 md:justify-start", className)}>
-			<SidebarTrigger className="absolute inset-s-0 md:hidden" />
-			<IconComponent weight="light" className="size-5" />
-			<h1 className="font-medium text-xl tracking-tight">{title}</h1>
-		</div>
+		<header className={cn("glass z-10 sticky top-0 flex items-center gap-x-4 px-4 py-3 md:px-6 md:py-4 rounded-xl mb-6 shadow-sm", className)}>
+			<SidebarTrigger className="md:hidden" />
+			<IconComponent weight="duotone" className="size-6 text-primary" />
+			<h1 className="font-semibold text-2xl tracking-tight text-foreground">{title}</h1>
+		</header>
 	);
 }

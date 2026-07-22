@@ -1,6 +1,5 @@
 import type { MessageDescriptor } from "@lingui/core";
-import { msg } from "@lingui/core/macro";
-import { t } from "@lingui/core/macro";
+import { msg, t } from "@lingui/core/macro";
 import { useLingui } from "@lingui/react";
 import { Trans } from "@lingui/react/macro";
 import { Plus, Shield, UserMinus } from "@phosphor-icons/react";
@@ -28,7 +27,7 @@ import {
 import { FormControl, FormItem, FormLabel, FormMessage } from "@reactive-resume/ui/components/form";
 import { Input } from "@reactive-resume/ui/components/input";
 import { useConfirm } from "@reactive-resume/ui/hooks/use-confirm";
-import { orpc } from "@/libs/orpc/client";
+import { client, orpc } from "@/libs/orpc/client";
 
 const ROLE_OPTIONS = [
 	{ value: "owner", label: msg`Owner` },
@@ -45,13 +44,13 @@ function InviteMemberDialog({ workspaceId }: { workspaceId: string }) {
 
 	const inviteMutation = useMutation({
 		mutationFn: (data: { email: string; role: string }) =>
-			orpc.workspace.members.invite.mutationOptions().mutationFn({
+			client.workspace.members.invite({
 				workspaceId,
 				email: data.email,
 				role: data.role as "admin" | "member" | "recruiter" | "auditor",
 			}),
 		onSuccess: () => {
-			void queryClient.invalidateQueries({ queryKey: orpc.workspace.members.list.queryKey() });
+			void queryClient.invalidateQueries({ queryKey: orpc.workspace.members.list.queryKey({ input: { workspaceId } }) });
 			setOpen(false);
 		},
 	});
@@ -117,16 +116,16 @@ function InviteMemberDialog({ workspaceId }: { workspaceId: string }) {
 									value={field.state.value}
 									onChange={(e) => field.handleChange(e.target.value)}
 								>
-								{ROLE_OPTIONS.map((r) => (
-									<option key={r.value} value={r.value}>
-										{i18n.t(r.label)}
-									</option>
-								))}
-							</select>
-						</FormItem>
-					)}
-				</form.Field>
-				<div className="flex justify-end gap-x-3">
+									{ROLE_OPTIONS.map((r) => (
+										<option key={r.value} value={r.value}>
+											{i18n.t(r.label)}
+										</option>
+									))}
+								</select>
+							</FormItem>
+						)}
+					</form.Field>
+					<div className="flex justify-end gap-x-3">
 						<DialogClose
 							render={
 								<Button variant="outline">
@@ -153,18 +152,18 @@ function MemberList({ workspaceId }: { workspaceId: string }) {
 
 	const updateRoleMutation = useMutation({
 		mutationFn: (data: { memberId: string; role: string }) =>
-			orpc.workspace.members.updateRole.mutationOptions().mutationFn({
+			client.workspace.members.updateRole({
 				workspaceId,
 				memberId: data.memberId,
 				role: data.role as "owner" | "admin" | "member" | "recruiter" | "auditor",
 			}),
-		onSuccess: () => void queryClient.invalidateQueries({ queryKey: orpc.workspace.members.list.queryKey() }),
+		onSuccess: () => void queryClient.invalidateQueries({ queryKey: orpc.workspace.members.list.queryKey({ input: { workspaceId } }) }),
 	});
 
 	const removeMutation = useMutation({
 		mutationFn: (memberId: string) =>
-			orpc.workspace.members.remove.mutationOptions().mutationFn({ workspaceId, memberId }),
-		onSuccess: () => void queryClient.invalidateQueries({ queryKey: orpc.workspace.members.list.queryKey() }),
+			client.workspace.members.remove({ workspaceId, memberId }),
+		onSuccess: () => void queryClient.invalidateQueries({ queryKey: orpc.workspace.members.list.queryKey({ input: { workspaceId } }) }),
 	});
 
 	const handleRemove = async (memberId: string, name: string) => {
@@ -195,12 +194,12 @@ function MemberList({ workspaceId }: { workspaceId: string }) {
 								value={member.role}
 								onChange={(e) => updateRoleMutation.mutate({ memberId: member.id, role: e.target.value })}
 							>
-							{ROLE_OPTIONS.map((r) => (
-								<option key={r.value} value={r.value}>
-									{i18n.t(r.label)}
-								</option>
-							))}
-						</select>
+								{ROLE_OPTIONS.map((r) => (
+									<option key={r.value} value={r.value}>
+										{i18n.t(r.label)}
+									</option>
+								))}
+							</select>
 							<Button
 								variant="ghost"
 								size="xs"

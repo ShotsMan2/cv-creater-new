@@ -1,10 +1,14 @@
 import type { Locale } from "@reactive-resume/utils/locale";
-import type { User } from "better-auth";
+import type { User as BetterAuthUser } from "better-auth";
 import { ORPCError, os } from "@orpc/server";
 import { eq } from "drizzle-orm";
 import { auth, verifyOAuthToken } from "@reactive-resume/auth/config";
 import { db } from "@reactive-resume/db/client";
 import { user } from "@reactive-resume/db/schema";
+
+type User = BetterAuthUser & {
+	role?: string | null | undefined;
+};
 
 interface ORPCContext {
 	locale: Locale;
@@ -95,6 +99,18 @@ export const protectedProcedure = publicProcedure.use(async ({ context, next }) 
 		context: {
 			...context,
 			user: context.user,
+		},
+	});
+});
+
+export const adminProcedure = protectedProcedure.use(async ({ context, next }) => {
+	if ((context.user as User).role !== "admin") {
+		throw new ORPCError("FORBIDDEN", { message: "Admin access required" });
+	}
+
+	return next({
+		context: {
+			...context,
 		},
 	});
 });

@@ -1,4 +1,5 @@
 import { createFileRoute, Outlet, redirect, useRouter } from "@tanstack/react-router";
+import { AnimatePresence, m } from "motion/react";
 import { SidebarProvider } from "@reactive-resume/ui/components/sidebar";
 import { createNoindexFollowMeta } from "@/libs/seo";
 import { getDashboardSidebarState, setDashboardSidebarState } from "./-components/functions";
@@ -32,8 +33,19 @@ function RouteComponent() {
 		<SidebarProvider open={sidebarState} onOpenChange={handleSidebarOpenChange}>
 			<DashboardSidebar />
 
-			<main className="@container flex-1 p-4 md:ps-2">
-				<Outlet />
+			<main className="@container flex-1 p-4 md:p-6 md:ps-2">
+				<AnimatePresence mode="wait">
+					<m.div
+						key={router.state.location.pathname}
+						initial={{ opacity: 0, y: 15 }}
+						animate={{ opacity: 1, y: 0 }}
+						exit={{ opacity: 0, y: -15 }}
+						transition={{ duration: 0.3, ease: "easeOut" }}
+						className="h-full flex flex-col"
+					>
+						<Outlet />
+					</m.div>
+				</AnimatePresence>
 			</main>
 		</SidebarProvider>
 	);

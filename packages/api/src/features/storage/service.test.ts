@@ -33,7 +33,7 @@ vi.mock("@aws-sdk/client-s3", () => ({
 	ListObjectsV2Command: vi.fn(),
 }));
 
-const { getStorageService, inferContentType, isImageFile, processImageForUpload } = await import("./service");
+const { inferContentType, isImageFile, processImageForUpload } = await import("./service");
 
 const makeFile = (bytes: Uint8Array, type = "image/png") =>
 	({

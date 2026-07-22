@@ -136,7 +136,7 @@ class LocalStorageService implements StorageService {
 		}
 	}
 
-	async write({ key, data, private: isPrivate }: StorageWriteInput): Promise<void> {
+	async write({ key, data, private: _isPrivate }: StorageWriteInput): Promise<void> {
 		const fullPath = this.resolvePath(key);
 
 		await fs.mkdir(dirname(fullPath), { recursive: true });
