@@ -102,6 +102,8 @@ export function registerTools(server: McpServer, client: RouterClient<typeof rou
 				"",
 				`Call this before \`${T.getResume}\`, \`${T.patchResume}\`, prompts, or \`resources/read\` with \`resume://{id}\`.`,
 				"Results can be filtered by tags and sorted by last updated date, creation date, or name.",
+				"",
+				"You can optionally scope results to a workspace with `workspaceId`.",
 			].join("\n"),
 			inputSchema: z.object({
 				tags: z
@@ -116,13 +118,25 @@ export function registerTools(server: McpServer, client: RouterClient<typeof rou
 					.optional()
 					.default("lastUpdatedAt")
 					.describe("Sort order for results. Default: lastUpdatedAt."),
+				workspaceId: z
+					.string()
+					.optional()
+					.describe("Scope results to a specific workspace. Use list_workspaces to find valid IDs."),
 			}),
 			annotations: TOOL_ANNOTATIONS[T.listResumes],
 		},
 		withErrorHandling(
 			"listing resumes",
-			async ({ tags, sort }: { tags: string[]; sort: "lastUpdatedAt" | "createdAt" | "name" }) => {
-				const resumes = await client.resume.list({ tags, sort });
+			async ({
+				tags,
+				sort,
+				workspaceId,
+			}: {
+				tags: string[];
+				sort: "lastUpdatedAt" | "createdAt" | "name";
+				workspaceId?: string | undefined;
+			}) => {
+				const resumes = await client.resume.list({ tags, sort, workspaceId });
 
 				if (resumes.length === 0) return text(`No resumes found. Use \`${T.createResume}\` to create one.`);
 
@@ -619,6 +633,148 @@ export function registerTools(server: McpServer, client: RouterClient<typeof rou
 
 			return text(`Resume (${id}) is now unlocked. It can be edited, patched, and deleted.`);
 		}),
+	);
+
+	// ── Workspace Tools ───────────────────────────────────────────
+
+	// ── List Workspaces ───────────────────────────────────────────
+	server.registerTool(
+		T.listWorkspaces,
+		{
+			title: "List Workspaces",
+			description: [
+				"Returns all workspaces that the authenticated user belongs to.",
+				"Each workspace includes its ID, name, slug, and your role within it.",
+				"Use the workspace ID with other workspace tools to manage members and resumes.",
+			].join("\n"),
+			inputSchema: z.object({}),
+			annotations: TOOL_ANNOTATIONS[T.listWorkspaces],
+		},
+		withErrorHandling("listing workspaces", async () => {
+			const workspaces = await client.workspace.list();
+			return text(JSON.stringify(workspaces, null, 2));
+		}),
+	);
+
+	// ── Create Workspace ─────────────────────────────────────────
+	server.registerTool(
+		T.createWorkspace,
+		{
+			title: "Create Workspace",
+			description: "Create a new workspace (team/organization). You become its owner.",
+			inputSchema: z.object({
+				name: z.string().min(1).max(64).describe("Display name for the workspace"),
+				slug: z.string().min(1).max(64).describe("URL-friendly slug for the workspace (e.g. 'my-company')"),
+			}),
+			annotations: TOOL_ANNOTATIONS[T.createWorkspace],
+		},
+		withErrorHandling("creating workspace", async ({ name, slug }: { name: string; slug: string }) => {
+			const id = await client.workspace.create({ name, slug });
+			return text(`Created workspace "${name}" (ID: ${id}) with slug "${slug}".`);
+		}),
+	);
+
+	// ── Get Workspace ─────────────────────────────────────────────
+	server.registerTool(
+		T.getWorkspace,
+		{
+			title: "Get Workspace",
+			description: "Get details of a specific workspace by ID, including your role.",
+			inputSchema: z.object({
+				id: z.string().min(1).describe("Workspace ID. Use list_workspaces to find valid IDs."),
+			}),
+			annotations: TOOL_ANNOTATIONS[T.getWorkspace],
+		},
+		withErrorHandling("getting workspace", async ({ id }: { id: string }) => {
+			const workspace = await client.workspace.getById({ id });
+			return text(JSON.stringify(workspace, null, 2));
+		}),
+	);
+
+	// ── List Workspace Members ────────────────────────────────────
+	server.registerTool(
+		T.listWorkspaceMembers,
+		{
+			title: "List Workspace Members",
+			description: "List all members of a workspace with their roles and join dates.",
+			inputSchema: z.object({
+				workspaceId: z.string().min(1).describe("Workspace ID. Use list_workspaces to find valid IDs."),
+			}),
+			annotations: TOOL_ANNOTATIONS[T.listWorkspaceMembers],
+		},
+		withErrorHandling("listing workspace members", async ({ workspaceId }: { workspaceId: string }) => {
+			const members = await client.workspace.members.list({ workspaceId });
+			return text(JSON.stringify(members, null, 2));
+		}),
+	);
+
+	// ── Invite Workspace Member ───────────────────────────────────
+	server.registerTool(
+		T.inviteWorkspaceMember,
+		{
+			title: "Invite Workspace Member",
+			description: "Invite someone to join a workspace by email. Requires admin or owner role.",
+			inputSchema: z.object({
+				workspaceId: z.string().min(1).describe("Workspace ID."),
+				email: z.string().email().describe("Email address of the person to invite."),
+				role: z
+					.enum(["admin", "member", "recruiter", "auditor"])
+					.optional()
+					.default("member")
+					.describe("Role to assign. Default: member."),
+			}),
+			annotations: TOOL_ANNOTATIONS[T.inviteWorkspaceMember],
+		},
+		withErrorHandling(
+			"inviting workspace member",
+			async ({ workspaceId, email, role }: { workspaceId: string; email: string; role: string }) => {
+				const result = await client.workspace.members.invite({
+					workspaceId,
+					email,
+					role: role as "admin" | "member" | "recruiter" | "auditor",
+				});
+				return text(`Invitation sent to ${email}. Token: ${result.token}`);
+			},
+		),
+	);
+
+	// ── List Workspace Resumes ────────────────────────────────────
+	server.registerTool(
+		T.listWorkspaceResumes,
+		{
+			title: "List Workspace Resumes",
+			description: [
+				"List all resumes within a workspace.",
+				"Returns an array of resume objects with metadata (without full resume data).",
+				"Results can be filtered by tags and sorted.",
+			].join("\n"),
+			inputSchema: z.object({
+				workspaceId: z.string().min(1).describe("Workspace ID to list resumes for."),
+				tags: z.array(z.string()).optional().default([]).describe("Filter resumes by tags."),
+				sort: z
+					.enum(["lastUpdatedAt", "createdAt", "name"])
+					.optional()
+					.default("lastUpdatedAt")
+					.describe("Sort order."),
+			}),
+			annotations: TOOL_ANNOTATIONS[T.listWorkspaceResumes],
+		},
+		withErrorHandling(
+			"listing workspace resumes",
+			async ({
+				workspaceId,
+				tags,
+				sort,
+			}: {
+				workspaceId: string;
+				tags: string[];
+				sort: "lastUpdatedAt" | "createdAt" | "name";
+			}) => {
+				const resumes = await client.resume.list({ tags, sort, workspaceId });
+				if (resumes.length === 0) return text("No resumes found in this workspace.");
+				return text(JSON.stringify(resumes, null, 2));
+			},
+		),
 	);
 
 	// ── Get Resume Statistics ────────────────────────────────────

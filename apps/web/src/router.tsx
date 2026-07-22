@@ -1,3 +1,4 @@
+import type { FeatureFlags } from "@reactive-resume/api/features/flags";
 import { createRouter } from "@tanstack/react-router";
 import { ErrorScreen } from "./components/layout/error-screen";
 import { LoadingScreen } from "./components/layout/loading-screen";
@@ -9,15 +10,19 @@ import { getQueryClient } from "./libs/query/client";
 import { getTheme } from "./libs/theme";
 import { routeTree } from "./routeTree.gen";
 
+const defaultFlags: FeatureFlags = { disableSignups: false, disableEmailAuth: false, showSponsors: false };
+
 export const getRouter = async () => {
 	const queryClient = getQueryClient();
 
-	const [theme, locale, session, flags] = await Promise.all([
-		getTheme(),
-		getLocale(),
-		getSession(),
-		client.flags.get(),
-	]);
+	const [theme, locale, session] = await Promise.all([getTheme(), getLocale(), getSession()]);
+
+	let flags: FeatureFlags;
+	try {
+		flags = await client.flags.get();
+	} catch {
+		flags = defaultFlags;
+	}
 
 	await loadLocale(locale);
 

@@ -24,6 +24,7 @@ export const crudRouter = {
 				userId: context.user.id,
 				tags: input.tags,
 				sort: input.sort,
+				workspaceId: input.workspaceId,
 			});
 		}),
 
@@ -71,6 +72,7 @@ export const crudRouter = {
 				tags: input.tags,
 				locale: context.locale,
 				userId: context.user.id,
+				workspaceId: input.workspaceId,
 				...(input.withSampleData ? { data: sampleResumeData } : {}),
 			});
 		}),
