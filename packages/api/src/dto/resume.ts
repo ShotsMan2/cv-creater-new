@@ -14,6 +14,7 @@ const resumeSchema = createSelectSchema(schema.resume, {
 	password: z.string().trim().min(6).max(64).nullable().describe("The password of the resume, if any."),
 	data: resumeDataSchema,
 	userId: z.string().describe("The ID of the user who owns the resume."),
+	workspaceId: z.string().nullable().optional().describe("The ID of the workspace this resume belongs to, if any."),
 	createdAt: z.date().describe("The date and time the resume was created."),
 	updatedAt: z.date().describe("The date and time the resume was last updated."),
 });
@@ -24,6 +25,7 @@ export const resumeDto = {
 			.object({
 				tags: z.array(z.string()).optional().default([]),
 				sort: z.enum(["lastUpdatedAt", "createdAt", "name"]).optional().default("lastUpdatedAt"),
+				workspaceId: z.string().optional(),
 			})
 			.optional()
 			.default({ tags: [], sort: "lastUpdatedAt" }),
@@ -49,7 +51,7 @@ export const resumeDto = {
 	create: {
 		input: resumeSchema
 			.pick({ name: true, slug: true, tags: true })
-			.extend({ withSampleData: z.boolean().default(false) }),
+			.extend({ withSampleData: z.boolean().default(false), workspaceId: z.string().optional() }),
 		output: z.string().describe("The ID of the created resume."),
 	},
 

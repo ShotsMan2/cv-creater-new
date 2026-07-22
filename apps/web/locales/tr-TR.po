@@ -54,8 +54,8 @@ msgid "{column, plural, one {# Column} other {# Columns}}"
 msgstr "{column, plural, one {# Sütun} other {# Sütunlar}}"
 
 #: src/routes/_home/-sections/hero.tsx
-msgid "<0>Finally,</0><1>A free and open-source resume builder</1>"
-msgstr "<0>Sonunda,</0><1>Ücretsiz ve açık kaynaklı bir özgeçmiş oluşturucu</1>"
+msgid "<0>Finally,</0><1>Bylva - CvCreator</1>"
+msgstr ""
 
 #: src/routes/_home/-sections/faq.tsx
 msgctxt "Home page FAQ section heading with each word visually separated into individual spans"
@@ -90,10 +90,6 @@ msgstr "6 ay"
 msgid "A confirmation link has been sent to your current email address. Please check your inbox to confirm the change."
 msgstr "Onaylama bağlantısı mevcut e-posta adresinize gönderildi. Lütfen değişikliği onaylamak için gelen kutunuzu kontrol edin."
 
-#: src/routes/_home/-sections/footer.tsx
-msgid "A free and open-source resume builder that simplifies the process of creating, updating, and sharing your resume."
-msgstr "Özgeçmişinizi oluşturma, güncelleme ve paylaşma süreçlerini kolaylaştıran ücretsiz ve açık kaynaklı bir özgeçmiş oluşturucu."
-
 #: src/routes/builder/$resumeId/-components/dock.tsx
 #: src/routes/builder/$resumeId/-sidebar/right/sections/sharing.tsx
 msgid "A link to your resume has been copied to clipboard."
@@ -107,10 +103,6 @@ msgstr "Yıllar boyunca birçok kişi bana Reactive Özgeçmiş hakkında deneyi
 msgid "A new verification link has been sent to your email address. Please check your inbox to verify your account."
 msgstr "Yeni bir doğrulama bağlantısı e-posta adresinize gönderildi. Lütfen hesabınızı doğrulamak için gelen kutunuzu kontrol edin."
 
-#: src/components/ui/copyright.tsx
-msgid "A passion project by <0>Amruth Pillai</0>."
-msgstr "<0>Amruth Pillai</0>'nin bir tutku projesi."
-
 #: src/routes/builder/$resumeId/-sidebar/right/sections/page.tsx
 msgid "A4"
 msgstr "A4"
@@ -122,6 +114,10 @@ msgstr "Kesinlikle! Özgeçmişinizi tek tıkla PDF'ye aktarabilirsiniz. Aktarı
 #: src/routes/_home/-sections/features.tsx
 msgid "Access your resumes and data programmatically using the API."
 msgstr "Özgeçmişlerinize ve verilerinize API aracılığıyla programlı olarak erişin."
+
+#: src/features/admin/components/audit-log-table.tsx
+msgid "Action"
+msgstr "İşlem"
 
 #: src/routes/builder/$resumeId/-sidebar/left/sections/custom-fields.tsx
 msgid "Add a custom field"
@@ -241,6 +237,15 @@ msgstr "Önce Satır Ekle"
 msgid "Adjust the resume for a remote-first role that values async communication and ownership."
 msgstr "Uzaktan çalışma odaklı, eş zamanlı olmayan iletişimi ve sorumluluk üstlenmeyi önemseyen bir pozisyon için özgeçmişinizi düzenleyin."
 
+#: src/features/admin/components/workspace-settings.tsx
+#: src/routes/admin/-components/sidebar.tsx
+msgid "Admin"
+msgstr "Yönetici"
+
+#: src/routes/admin/index.tsx
+msgid "Admin Dashboard"
+msgstr "Yönetici Paneli"
+
 #: src/libs/locale.ts
 msgid "Afrikaans"
 msgstr "Afrikaans"
@@ -292,6 +297,10 @@ msgstr "Yapay zeka sağlayıcılarının REDIS_URL ve ENCRYPTION_SECRET'in yapı
 #: src/libs/locale.ts
 msgid "Albanian"
 msgstr "Arnavutça"
+
+#: src/features/admin/components/audit-log-table.tsx
+msgid "All actions"
+msgstr "Tüm işlemler"
 
 #: src/routes/builder/$resumeId/-sidebar/right/sections/sharing.tsx
 msgid "Allow Public Access"
@@ -361,9 +370,9 @@ msgstr "API Anahtarları"
 msgid "API keys are encrypted on the server and never shown again after saving."
 msgstr "API anahtarları sunucuda şifrelenir ve kaydedildikten sonra bir daha asla gösterilmez."
 
-#: src/features/settings/pages/api-keys.tsx
-msgid "API Reference"
-msgstr "API Referansı"
+#: src/features/admin/components/telemetry-dashboard.tsx
+msgid "API Latency (p95)"
+msgstr "API Gecikme (p95)"
 
 #: src/routes/dashboard/-components/sidebar.tsx
 msgid "App"
@@ -453,6 +462,20 @@ msgstr "Dosyaları ekleyin"
 #: src/routes/agent/$threadId.tsx
 msgid "Attachment uploaded."
 msgstr "Ek dosya yüklendi."
+
+#: src/features/admin/components/audit-log-table.tsx
+msgid "Audit Details"
+msgstr "Denetim Detayları"
+
+#: src/features/admin/components/audit-log-table.tsx
+#: src/routes/admin/-components/sidebar.tsx
+#: src/routes/admin/audit.tsx
+msgid "Audit Log"
+msgstr "Denetim Günlüğü"
+
+#: src/features/admin/components/workspace-settings.tsx
+msgid "Auditor"
+msgstr "Denetçi"
 
 #: src/features/command-palette/pages/navigation.tsx
 #: src/routes/dashboard/-components/sidebar.tsx
@@ -546,12 +569,18 @@ msgstr "Bulgarca"
 msgid "Bullet List"
 msgstr "Madde Listesi"
 
-#. Tagline shown in app footer/about area
-#: src/components/ui/copyright.tsx
 #: src/routes/_home/-sections/features.tsx
 #: src/routes/_home/-sections/prefooter.tsx
 msgid "By the community, for the community."
 msgstr "Topluluk tarafından topluluk için oluşturuldu."
+
+#: src/routes/_home/-sections/header.tsx
+msgid "Bylva - cv creator - Go to homepage"
+msgstr ""
+
+#: src/routes/_home/-sections/hero.tsx
+msgid "Bylva - CvCreator"
+msgstr ""
 
 #: src/routes/_home/-sections/faq.tsx
 msgid "Can I export my resume to PDF?"
@@ -580,6 +609,7 @@ msgstr "Özgeçmişimi PDF olarak dışa aktarabilir miyim?"
 #: src/dialogs/resume/sections/skill.tsx
 #: src/dialogs/resume/sections/summary-item.tsx
 #: src/dialogs/resume/sections/volunteer.tsx
+#: src/features/admin/components/workspace-settings.tsx
 #: src/features/settings/pages/api-keys.tsx
 #: src/features/settings/pages/danger-zone.tsx
 #: src/features/settings/pages/profile.tsx
@@ -995,6 +1025,10 @@ msgstr "Karanlık"
 msgid "Dark theme"
 msgstr "Karanlık tema"
 
+#: src/routes/admin/-components/sidebar.tsx
+msgid "Dashboard"
+msgstr "Kontrol Paneli"
+
 #: src/routes/_home/-sections/features.tsx
 msgid "Data Security"
 msgstr "Veri Güvenliği"
@@ -1004,6 +1038,10 @@ msgstr "Veri Güvenliği"
 #: src/dialogs/resume/sections/publication.tsx
 msgid "Date"
 msgstr "Tarih"
+
+#: src/features/admin/components/telemetry-dashboard.tsx
+msgid "DB Connection Pool"
+msgstr "Veritabanı Bağlantı Havuzu"
 
 #: src/routes/agent/$threadId.tsx
 msgid "Decrease zoom"
@@ -1116,10 +1154,6 @@ msgstr "Bağlantıyı Kes"
 msgid "Discord"
 msgstr "Discord"
 
-#: src/components/ui/donation-toast.tsx
-msgid "Dismiss"
-msgstr "Azletmek"
-
 #: src/routes/_home/-sections/footer.tsx
 #: src/routes/builder/$resumeId/-sidebar/right/sections/information.tsx
 msgid "Documentation"
@@ -1128,10 +1162,6 @@ msgstr "Dökümantasyon"
 #: src/features/auth/pages/login.tsx
 msgid "Don't have an account? <0/>"
 msgstr "Hesabınız yok mu? <0/>"
-
-#: src/components/ui/donation-toast.tsx
-msgid "Donate"
-msgstr "Bağış yapmak"
 
 #: src/routes/builder/$resumeId/-sidebar/right/sections/information.tsx
 msgid "Donate to Reactive Resume"
@@ -1235,6 +1265,7 @@ msgstr "Anahtar kelime düzenleme..."
 msgid "Education"
 msgstr "Eğitim"
 
+#: src/features/admin/components/workspace-settings.tsx
 #: src/routes/builder/$resumeId/-sidebar/left/sections/basics.tsx
 msgid "Email"
 msgstr "E-Posta"
@@ -1340,10 +1371,6 @@ msgstr "Bitiş tarihi {0}"
 msgid "Explore our diverse selection of templates, each designed to fit different styles, professions, and personalities. Reactive Resume currently offers 12 templates, with more on the way."
 msgstr "Farklı stiller, meslekler ve kişiliklere uygun şekilde tasarlanmış çeşitli şablonlarımızı keşfedin. Reaktif Özgeçmiş şu anda 12 şablon sunuyor ve daha fazlası yolda."
 
-#: src/features/settings/pages/api-keys.tsx
-msgid "Explore the API documentation to learn how to integrate Reactive Resume with your applications. Find detailed endpoints, request examples, and authentication methods."
-msgstr "Uygulamalarınızla Reaktif Özgeçmiş'i entegre etmeyi öğrenmek için API dökümantasyonunu inceleyin. Ayrıntılı uç noktalar, istek örnekleri ve kimlik doğrulama yöntemlerini bulun."
-
 #: src/libs/resume/section.tsx
 msgid "Export"
 msgstr "Dışa aktar"
@@ -1374,6 +1401,10 @@ msgstr "API anahtarı oluşturulamadı. Lütfen tekrar deneyin."
 #: src/features/auth/pages/register.tsx
 msgid "Failed to create your account. Please try again."
 msgstr "Hesabınız oluşturulamadı. Lütfen tekrar deneyin."
+
+#: src/routes/agent/-components/new-thread-setup.tsx
+msgid "Failed to decrypt the AI provider's API key. Please update the API key in settings."
+msgstr ""
 
 #. Fallback toast when deleting a passkey fails
 #: src/features/settings/authentication/components/passkeys.tsx
@@ -1805,10 +1836,6 @@ msgstr "Ana Sayfa"
 msgid "How do I share my resume?"
 msgstr "Özgeçmişimi nasıl paylaşabilirim?"
 
-#: src/features/settings/pages/api-keys.tsx
-msgid "How do I use the API?"
-msgstr "API'yi nasıl kullanırım?"
-
 #: src/routes/_home/-sections/faq.tsx
 msgid "How is my data protected?"
 msgstr "Verilerim nasıl korunuyor?"
@@ -1887,6 +1914,14 @@ msgstr "İlgi Alanları"
 #: src/features/settings/integrations/components/ai-section.tsx
 msgid "Invalid AI provider configuration."
 msgstr "Geçersiz yapay zeka sağlayıcı yapılandırması."
+
+#: src/features/admin/components/workspace-settings.tsx
+msgid "Invite Member"
+msgstr "Üye Davet Et"
+
+#: src/features/admin/components/workspace-settings.tsx
+msgid "Invite Team Member"
+msgstr "Takım Üyesi Davet Et"
 
 #: src/routes/_home/-sections/faq.tsx
 msgid "Is Reactive Resume available in multiple languages?"
@@ -2002,6 +2037,10 @@ msgstr "Son analiz tarihi {updatedAtLabel}"
 msgid "Last downloaded on {0}"
 msgstr "{0} tarihinde son indirildi"
 
+#: src/features/admin/components/telemetry-dashboard.tsx
+msgid "Last updated"
+msgstr "Son güncelleme"
+
 #: src/routes/dashboard/resumes/-components/cards/resume-card.tsx
 #: src/routes/dashboard/resumes/-components/list-view.tsx
 msgid "Last updated on {updatedAt}"
@@ -2050,10 +2089,6 @@ msgstr "Düzey"
 #: src/components/level/display.tsx
 msgid "Level {level} of 5"
 msgstr "5 üzerinden {level} düzey"
-
-#: src/components/ui/copyright.tsx
-msgid "Licensed under <0>MIT</0>."
-msgstr "<0>MIT</0> altında lisanslanmıştır."
 
 #. Appearance theme option for light mode
 #: src/features/user/dropdown-menu.tsx
@@ -2170,6 +2205,10 @@ msgstr "Malayca"
 msgid "Malayalam"
 msgstr "Malayalamca"
 
+#: src/features/admin/components/workspace-settings.tsx
+msgid "Manage workspace members and their roles"
+msgstr "Çalışma alanı üyelerini ve rollerini yönetin"
+
 #: src/libs/locale.ts
 msgid "Marathi"
 msgstr "Marathi"
@@ -2186,6 +2225,10 @@ msgstr "Kenar Boşluğu (Dikey)"
 #: src/routes/builder/$resumeId/-sidebar/right/sections/resume-analysis.tsx
 msgid "Medium"
 msgstr "Orta"
+
+#: src/features/admin/components/workspace-settings.tsx
+msgid "Member"
+msgstr "Üye"
 
 #. File format label in import source selector
 #: src/dialogs/resume/import.tsx
@@ -2264,10 +2307,18 @@ msgstr "Yeni konu"
 msgid "No Advertising, No Tracking"
 msgstr "Reklam Yok, Takip Yok"
 
+#: src/features/admin/components/audit-log-table.tsx
+msgid "No audit entries found."
+msgstr "Denetim kaydı bulunamadı."
+
 #. Error shown when AI import endpoint returns no parsed resume data
 #: src/dialogs/resume/import.tsx
 msgid "No data was returned from the AI provider."
 msgstr "AI sağlayıcısından herhangi bir veri dönmemiştir."
+
+#: src/features/admin/components/workspace-settings.tsx
+msgid "No members yet."
+msgstr "Henüz üye yok."
 
 #: src/features/settings/authentication/components/passkeys.tsx
 msgid "No passkeys registered yet."
@@ -2378,6 +2429,10 @@ msgstr "Organizasyon"
 #: src/routes/builder/$resumeId/-sidebar/right/sections/resume-analysis.tsx
 msgid "Overall Score"
 msgstr "Genel Puan"
+
+#: src/features/admin/components/workspace-settings.tsx
+msgid "Owner"
+msgstr "Sahip"
 
 #: src/libs/resume/section.tsx
 msgid "Page"
@@ -2512,10 +2567,6 @@ msgstr "Devam etmek için özgeçmişin sahibinin sizinle paylaştığı şifrey
 msgid "Please enter the URL you want to link to:"
 msgstr "Bağlamak istediğiniz URL'yi girin:"
 
-#: src/components/ui/donation-toast.tsx
-msgid "Please support the project"
-msgstr "Lütfen projeyi destekleyin."
-
 #: src/features/resume/public/public-resume.tsx
 #: src/routes/builder/$resumeId/-components/dock.tsx
 #: src/routes/builder/$resumeId/-sidebar/right/sections/export.tsx
@@ -2628,10 +2679,6 @@ msgstr "Yayınlar"
 msgid "Publisher"
 msgstr "Yayınlayıcı"
 
-#: src/routes/_home/-sections/header.tsx
-msgid "Reactive Resume - Go to homepage"
-msgstr "Reactive Özgeçmiş - Ana sayfaya git"
-
 #. Import source option for current Reactive Resume JSON format
 #: src/dialogs/resume/import.tsx
 msgid "Reactive Resume (JSON)"
@@ -2645,14 +2692,6 @@ msgstr "Reactive Resume canlı topluluğu sayesinde büyümeye devam ediyor. Bu 
 msgid "Reactive Resume is a free and open-source project, built with love and maintained by me and a community of contributors. Your donations help keep the lights on and the code flowing."
 msgstr "Reactive Resume, sevgiyle yapılan ve benimle birlikte katkıda bulunanlar topluluğunun sürdürdüğü ücretsiz ve açık kaynaklı bir projedir. Bağışlarınız ışıkların açık kalmasına ve kodun akmasına yardımcı olur."
 
-#: src/routes/_home/-sections/hero.tsx
-msgid "Reactive Resume is a free and open-source resume builder that simplifies the process of creating, updating, and sharing your resume."
-msgstr "Reactive Resume, özgeçmişinizi oluşturma, güncelleme ve paylaşma sürecini kolaylaştıran ücretsiz ve açık kaynaklı bir özgeçmiş oluşturucusudur."
-
-#: src/components/ui/donation-toast.tsx
-msgid "Reactive Resume is free and open source. If it has helped you, please consider donating."
-msgstr "Reactive Resume ücretsiz ve açık kaynaklıdır. Eğer size yardımcı olduysa, lütfen bağış yapmayı düşünün."
-
 #: src/routes/_home/-sections/faq.tsx
 msgid "Reactive Resume is open-source, privacy-focused, and completely free. Unlike other resume builders, it doesn't show ads, track your data, or limit your features behind a paywall."
 msgstr "Reactive Özgeçmiş açık kaynaklı, gizliliğe önem veren ve tamamen ücretsizdir. Diğer özgeçmiş oluşturuculardan farklı olarak reklam göstermez, verilerinizi takip etmez veya özelliklerinizi bir ödeme duvarının arkasına gizlemez."
@@ -2660,11 +2699,6 @@ msgstr "Reactive Özgeçmiş açık kaynaklı, gizliliğe önem veren ve tamamen
 #: src/routes/_home/-sections/sponsors.tsx
 msgid "Reactive Resume stays free, open-source, and independent because companies choose to support the work behind it. Their sponsorship helps fund hosting, maintenance, and continued development for the community."
 msgstr "Reactive Resume, şirketlerin arkasındaki çalışmaları desteklemeyi tercih etmeleri sayesinde ücretsiz, açık kaynaklı ve bağımsız kalmaktadır. Sponsorlukları, topluluk için barındırma, bakım ve sürekli geliştirme çalışmalarının finansmanına yardımcı olmaktadır."
-
-#. App version label in footer; includes semantic version variable
-#: src/components/ui/copyright.tsx
-msgid "Reactive Resume v{__APP_VERSION__}"
-msgstr "Reaktif Özgeçmiş v{__APP_VERSION__}"
 
 #. Import source option for legacy Reactive Resume v4 JSON format
 #: src/dialogs/resume/import.tsx
@@ -2675,6 +2709,10 @@ msgstr "Reaktif Özgeçmiş v4 (JSON)"
 msgid "Recipient"
 msgstr "Alıcı"
 
+#: src/features/admin/components/workspace-settings.tsx
+msgid "Recruiter"
+msgstr "İşe Alımcı"
+
 #: src/components/level/combobox.tsx
 msgid "Rectangle"
 msgstr "Dikdörtgen"
@@ -2682,6 +2720,10 @@ msgstr "Dikdörtgen"
 #: src/components/level/combobox.tsx
 msgid "Rectangle (Full Width)"
 msgstr "Dikdörtgen (Tam Genişlik)"
+
+#: src/features/admin/components/telemetry-dashboard.tsx
+msgid "Redis Clients"
+msgstr "Redis İstemcileri"
 
 #: src/dialogs/resume/sections/custom.tsx
 #: src/libs/resume/section-title.ts
@@ -2702,6 +2744,7 @@ msgid "Remember your password? <0/>"
 msgstr "Şifrenizi hatırladınız mı? <0/>"
 
 #: src/dialogs/resume/sections/experience.tsx
+#: src/features/admin/components/workspace-settings.tsx
 msgid "Remove"
 msgstr "Kaldır"
 
@@ -2709,6 +2752,10 @@ msgstr "Kaldır"
 #: src/components/input/chip-input.tsx
 msgid "Remove {chip}"
 msgstr "{chip} adresini kaldırın"
+
+#: src/features/admin/components/workspace-settings.tsx
+msgid "Remove {name}?"
+msgstr ""
 
 #: src/routes/builder/$resumeId/-sidebar/right/sections/sharing.tsx
 msgid "Remove Password"
@@ -2820,6 +2867,10 @@ msgstr "Bu özgeçmişi, net iş etkisi yaratacak şekilde, bir girişim kurucus
 msgid "Right Align"
 msgstr "Sağa Hizala"
 
+#: src/features/admin/components/workspace-settings.tsx
+msgid "Role"
+msgstr "Rol"
+
 #: src/dialogs/resume/sections/experience.tsx
 msgid "Role Progression"
 msgstr "Rol İlerlemesi"
@@ -2847,6 +2898,10 @@ msgstr "Bir puan kartı, güçlü yönler ve önceliklendirilmiş öneriler elde
 #: src/libs/locale.ts
 msgid "Russian"
 msgstr "Rusça"
+
+#: src/features/admin/components/telemetry-dashboard.tsx
+msgid "S3 Storage Used"
+msgstr "Kullanılan S3 Depolama"
 
 #. Passkey rename prompt confirm action in authentication settings
 #: src/features/settings/authentication/components/passkeys.tsx
@@ -2888,6 +2943,10 @@ msgstr "Okul"
 #: src/routes/builder/$resumeId/-sidebar/right/sections/resume-analysis.tsx
 msgid "Scorecard"
 msgstr "Puan Kartı"
+
+#: src/features/admin/components/audit-log-table.tsx
+msgid "Search audit log..."
+msgstr "Denetim günlüğünde ara..."
 
 #. Accessible label for command palette search input
 #: src/features/command-palette/index.tsx
@@ -2949,6 +3008,14 @@ msgstr "Seç..."
 msgid "Self-Host with Docker"
 msgstr "Docker ile kendi kendine barındırma"
 
+#: src/features/admin/components/workspace-settings.tsx
+msgid "Send an invitation to join this workspace."
+msgstr "Bu çalışma alanına katılmak için bir davet gönderin."
+
+#: src/features/admin/components/workspace-settings.tsx
+msgid "Send Invite"
+msgstr "Davet Gönder"
+
 #: src/routes/agent/$threadId.tsx
 msgid "Send message"
 msgstr "Mesaj gönder"
@@ -2961,6 +3028,10 @@ msgstr "Şifre Sıfırlama E-postası Gönder"
 #: src/features/auth/pages/forgot-password.tsx
 msgid "Sending password reset email..."
 msgstr "Şifre sıfırlama e-postası gönderiliyor..."
+
+#: src/features/admin/components/workspace-settings.tsx
+msgid "Sending..."
+msgstr "Gönderiliyor..."
 
 #: src/components/input/rich-input.tsx
 msgid "Separator"
@@ -3270,6 +3341,10 @@ msgstr "Koyu temaya geç"
 msgid "Switch to light theme"
 msgstr "Açık temaya geç"
 
+#: src/routes/admin/telemetry.tsx
+msgid "System Telemetry"
+msgstr "Sistem Telemetrisi"
+
 #: src/components/input/rich-input.tsx
 msgid "Table"
 msgstr "Tablo"
@@ -3289,6 +3364,14 @@ msgstr "Bu özgeçmişi ürün yöneticisi iş tanımına göre uyarlayın ve yo
 #: src/libs/locale.ts
 msgid "Tamil"
 msgstr "Tamilce"
+
+#: src/features/admin/components/workspace-settings.tsx
+msgid "Team Members"
+msgstr "Takım Üyeleri"
+
+#: src/routes/admin/-components/sidebar.tsx
+msgid "Telemetry"
+msgstr "Telemetri"
 
 #: src/libs/locale.ts
 msgid "Telugu"
@@ -3471,6 +3554,10 @@ msgstr "Bu, birden fazla geçiş anahtarına sahip olmayı planlıyorsanız, dah
 msgid "This will remove all items from this section."
 msgstr "Bu, bu bölümdeki tüm öğeleri kaldıracaktır."
 
+#: src/features/admin/components/workspace-settings.tsx
+msgid "This will remove them from the workspace."
+msgstr ""
+
 #: src/routes/agent/-components/thread-sidebar.tsx
 #: src/routes/agent/$threadId.tsx
 msgid "Thread actions"
@@ -3534,9 +3621,28 @@ msgstr "Özgeçmiş önizlemesini aç/kapat"
 msgid "Toggle right sidebar"
 msgstr "Sağ kenar çubuğunu aç / kapat"
 
+#: src/routes/agent/-components/thread-sidebar.tsx
 #: src/routes/agent/$threadId.tsx
+#: src/routes/agent/index.tsx
+#: src/routes/agent/new.tsx
 msgid "Toggle threads"
 msgstr "Konuları açıp kapat"
+
+#: src/features/admin/components/telemetry-dashboard.tsx
+msgid "Total Resumes"
+msgstr "Toplam Özgeçmiş"
+
+#: src/features/admin/components/telemetry-dashboard.tsx
+msgid "Total Users"
+msgstr "Toplam Kullanıcı"
+
+#: src/features/admin/components/telemetry-dashboard.tsx
+msgid "Total Workspaces"
+msgstr "Toplam Çalışma Alanı"
+
+#: src/features/admin/components/audit-log-table.tsx
+msgid "Track all system activities and changes"
+msgstr "Tüm sistem faaliyetlerini ve değişikliklerini takip edin"
 
 #: src/routes/builder/$resumeId/-sidebar/right/sections/statistics.tsx
 msgid "Track your resume's views and downloads"
@@ -3635,6 +3741,10 @@ msgstr "Ukraynaca"
 #: src/components/input/rich-input.tsx
 msgid "Underline"
 msgstr "Altı Çizili"
+
+#: src/features/admin/components/audit-log-table.tsx
+msgid "Unknown"
+msgstr "Bilinmeyen"
 
 #: src/routes/_home/-sections/features.tsx
 msgid "Unlimited Resumes"
@@ -3903,6 +4013,11 @@ msgstr "OpenAI ile çalışın"
 msgid "Working…"
 msgstr "burada çalışıyor"
 
+#: src/routes/admin/-components/sidebar.tsx
+#: src/routes/admin/workspaces.tsx
+msgid "Workspaces"
+msgstr "Çalışma Alanları"
+
 #: src/routes/_home/-sections/footer.tsx
 msgid "X (Twitter)"
 msgstr "X (Twitter)"
@@ -3926,6 +4041,10 @@ msgstr "Giriş yapmak için kullanıcı adınızı da kullanabilirsiniz."
 #: src/routes/_home/-sections/faq.tsx
 msgid "You can share your resume via a unique public URL, protect it with a password, or download it as a PDF to share directly. The choice is yours!"
 msgstr "Özgeçmişinizi benzersiz bir halka açık URL ile paylaşabilir, şifre ile koruyabilir veya doğrudan paylaşmak için PDF olarak indirebilirsiniz. Seçim size ait!"
+
+#: src/routes/admin/workspaces.tsx
+msgid "You don't have any workspaces yet."
+msgstr "Henüz çalışma alanınız yok."
 
 #: src/hooks/use-form-blocker.tsx
 msgid "You have unsaved changes that will be lost."
@@ -4017,4 +4136,3 @@ msgstr "Uzaklaştır"
 #: src/libs/locale.ts
 msgid "Zulu"
 msgstr "Zulu"
-

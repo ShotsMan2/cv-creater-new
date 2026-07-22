@@ -17,4 +17,11 @@ export const MCP_TOOL_NAME = {
 	lockResume: "lock_resume",
 	unlockResume: "unlock_resume",
 	getResumeStatistics: "get_resume_statistics",
+	// Workspace tools
+	listWorkspaces: "list_workspaces",
+	createWorkspace: "create_workspace",
+	getWorkspace: "get_workspace",
+	listWorkspaceMembers: "list_workspace_members",
+	inviteWorkspaceMember: "invite_workspace_member",
+	listWorkspaceResumes: "list_workspace_resumes",
 } as const;

@@ -18,6 +18,17 @@ export const relations = defineRelations(schema, (r) => ({
 		oauthRefreshTokens: r.many.oauthRefreshToken(),
 		oauthAccessTokens: r.many.oauthAccessToken(),
 		oauthConsents: r.many.oauthConsent(),
+		ownedWorkspaces: r.many.workspace(),
+		workspaceMemberships: r.many.workspaceMember({
+			from: r.user.id,
+			to: r.workspaceMember.userId,
+		}),
+		workspaceInvitesSent: r.many.workspaceInvite({
+			from: r.user.id,
+			to: r.workspaceInvite.invitedBy,
+		}),
+		auditLogs: r.many.auditLog(),
+		aiTokenQuotas: r.many.aiTokenQuota(),
 	},
 	session: {
 		user: r.one.user({
@@ -55,6 +66,10 @@ export const relations = defineRelations(schema, (r) => ({
 		user: r.one.user({
 			from: r.resume.userId,
 			to: r.user.id,
+		}),
+		workspace: r.one.workspace({
+			from: r.resume.workspaceId,
+			to: r.workspace.id,
 		}),
 		statistics: r.one.resumeStatistics({
 			from: r.resume.id,
@@ -215,6 +230,62 @@ export const relations = defineRelations(schema, (r) => ({
 	oauthConsent: {
 		user: r.one.user({
 			from: r.oauthConsent.userId,
+			to: r.user.id,
+		}),
+	},
+	workspace: {
+		owner: r.one.user({
+			from: r.workspace.ownerId,
+			to: r.user.id,
+		}),
+		members: r.many.workspaceMember(),
+		invites: r.many.workspaceInvite(),
+		auditLogs: r.many.auditLog(),
+		aiTokenQuotas: r.many.aiTokenQuota(),
+		resumes: r.many.resume(),
+	},
+	workspaceMember: {
+		workspace: r.one.workspace({
+			from: r.workspaceMember.workspaceId,
+			to: r.workspace.id,
+		}),
+		user: r.one.user({
+			from: r.workspaceMember.userId,
+			to: r.user.id,
+		}),
+		inviter: r.one.user({
+			from: r.workspaceMember.invitedBy,
+			to: r.user.id,
+		}),
+	},
+	workspaceInvite: {
+		workspace: r.one.workspace({
+			from: r.workspaceInvite.workspaceId,
+			to: r.workspace.id,
+		}),
+		inviter: r.one.user({
+			from: r.workspaceInvite.invitedBy,
+			to: r.user.id,
+		}),
+	},
+	auditLog: {
+		workspace: r.one.workspace({
+			from: r.auditLog.workspaceId,
+			to: r.workspace.id,
+		}),
+		user: r.one.user({
+			from: r.auditLog.userId,
+			to: r.user.id,
+		}),
+	},
+	telemetryMetric: {},
+	aiTokenQuota: {
+		workspace: r.one.workspace({
+			from: r.aiTokenQuota.workspaceId,
+			to: r.workspace.id,
+		}),
+		user: r.one.user({
+			from: r.aiTokenQuota.userId,
 			to: r.user.id,
 		}),
 	},

@@ -120,7 +120,7 @@ export function DashboardSidebar() {
 	const { state } = useSidebarState();
 
 	return (
-		<Sidebar variant="floating" collapsible="icon">
+		<Sidebar variant="floating" collapsible="icon" className="glass">
 			<SidebarHeader>
 				<SidebarMenu>
 					<SidebarMenuItem>

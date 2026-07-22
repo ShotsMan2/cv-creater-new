@@ -17,3 +17,13 @@ export async function deleteE2EUser(account: E2EAccount) {
 		await pool.end();
 	}
 }
+
+export async function setE2EUserRole(account: E2EAccount, role: "user" | "admin") {
+	const pool = new Pool({ connectionString: getDatabaseUrl() });
+
+	try {
+		await pool.query('update "user" set role = $1 where email = $2', [role, account.email]);
+	} finally {
+		await pool.end();
+	}
+}

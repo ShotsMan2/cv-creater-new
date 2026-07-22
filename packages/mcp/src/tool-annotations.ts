@@ -107,4 +107,41 @@ export const TOOL_ANNOTATIONS: Record<McpRegisteredToolName, ToolAnnotations> = 
 		idempotentHint: true,
 		openWorldHint: false,
 	},
+	// Workspace tools
+	[MCP_TOOL_NAME.listWorkspaces]: {
+		readOnlyHint: true,
+		destructiveHint: false,
+		idempotentHint: true,
+		openWorldHint: false,
+	},
+	[MCP_TOOL_NAME.createWorkspace]: {
+		readOnlyHint: false,
+		destructiveHint: false,
+		idempotentHint: false,
+		openWorldHint: false,
+	},
+	[MCP_TOOL_NAME.getWorkspace]: {
+		readOnlyHint: true,
+		destructiveHint: false,
+		idempotentHint: true,
+		openWorldHint: false,
+	},
+	[MCP_TOOL_NAME.listWorkspaceMembers]: {
+		readOnlyHint: true,
+		destructiveHint: false,
+		idempotentHint: true,
+		openWorldHint: false,
+	},
+	[MCP_TOOL_NAME.inviteWorkspaceMember]: {
+		readOnlyHint: false,
+		destructiveHint: false,
+		idempotentHint: false,
+		openWorldHint: false,
+	},
+	[MCP_TOOL_NAME.listWorkspaceResumes]: {
+		readOnlyHint: true,
+		destructiveHint: false,
+		idempotentHint: true,
+		openWorldHint: false,
+	},
 };

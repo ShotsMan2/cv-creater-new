@@ -43,12 +43,12 @@ export function Header() {
 	return (
 		<m.header
 			style={{ y: springY }}
-			className="fixed inset-x-0 top-0 z-50 border-transparent border-b bg-background/80 backdrop-blur-lg transition-colors"
+			className="fixed inset-x-4 top-4 z-50 glass rounded-2xl max-w-7xl mx-auto"
 			initial={{ y: -100, opacity: 0 }}
 			animate={{ y: 0, opacity: 1 }}
-			transition={{ duration: 0.35, ease: "easeOut" }}
+			transition={{ duration: 0.4, ease: "easeOut" }}
 		>
-			<nav aria-label={t`Main navigation`} className="container mx-auto flex items-center gap-x-4 p-3 lg:px-12">
+			<nav aria-label={t`Main navigation`} className="flex items-center gap-x-4 p-3 lg:px-6">
 				<Link
 					to="/"
 					className="transition-opacity hover:opacity-80"

@@ -235,7 +235,24 @@ export const resumeService = {
 	statistics,
 	analysis,
 
-	list: async (input: { userId: string; tags: string[]; sort: "lastUpdatedAt" | "createdAt" | "name" }) => {
+	list: async (input: {
+		userId: string;
+		tags: string[];
+		sort: "lastUpdatedAt" | "createdAt" | "name";
+		workspaceId?: string | undefined;
+	}) => {
+		const conditions = [
+			match(input.tags.length)
+				.with(0, () => undefined)
+				.otherwise(() => arrayContains(schema.resume.tags, input.tags)),
+		];
+
+		if (input.workspaceId) {
+			conditions.push(eq(schema.resume.workspaceId, input.workspaceId));
+		} else {
+			conditions.push(eq(schema.resume.userId, input.userId));
+		}
+
 		return await db
 			.select({
 				id: schema.resume.id,
@@ -246,16 +263,10 @@ export const resumeService = {
 				isLocked: schema.resume.isLocked,
 				createdAt: schema.resume.createdAt,
 				updatedAt: schema.resume.updatedAt,
+				workspaceId: schema.resume.workspaceId,
 			})
 			.from(schema.resume)
-			.where(
-				and(
-					eq(schema.resume.userId, input.userId),
-					match(input.tags.length)
-						.with(0, () => undefined)
-						.otherwise(() => arrayContains(schema.resume.tags, input.tags)),
-				),
-			)
+			.where(and(...conditions))
 			.orderBy(
 				match(input.sort)
 					.with("lastUpdatedAt", () => desc(schema.resume.updatedAt))
@@ -329,7 +340,8 @@ export const resumeService = {
 		slug: string;
 		tags: string[];
 		locale: Locale;
-		data?: ResumeData;
+		data?: ResumeData | undefined;
+		workspaceId?: string | undefined;
 	}) => {
 		const id = generateId();
 		const data = input.data ?? defaultResumeData;
@@ -343,6 +355,7 @@ export const resumeService = {
 				tags: input.tags,
 				userId: input.userId,
 				data,
+				workspaceId: input.workspaceId,
 			});
 
 			await notifyResumeUpdated({

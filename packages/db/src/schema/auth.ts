@@ -8,6 +8,8 @@ function lower<T extends AnyPgColumn>(column: T): SQL<T> {
 	return sql`lower(${column})`;
 }
 
+export const roleEnum = pg.pgEnum("role", ["user", "admin"]);
+
 export const user = pg.pgTable(
 	"user",
 	{
@@ -24,7 +26,7 @@ export const user = pg.pgTable(
 		displayUsername: pg.text("display_username").notNull().unique(),
 		twoFactorEnabled: pg.boolean("two_factor_enabled").notNull().default(false),
 		lastActiveAt: pg.timestamp("last_active_at", { withTimezone: true }),
-		role: pg.text("role").default("user"),
+		role: roleEnum("role").default("user"),
 		banned: pg.boolean("banned").default(false),
 		banReason: pg.text("ban_reason"),
 		banExpires: pg.timestamp("ban_expires", {
