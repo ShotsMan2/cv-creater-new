@@ -43,7 +43,7 @@ export function Header() {
 	return (
 		<m.header
 			style={{ y: springY }}
-			className="fixed inset-x-4 top-4 z-50 glass rounded-2xl max-w-7xl mx-auto"
+			className="glass fixed inset-x-4 top-4 z-50 mx-auto max-w-7xl rounded-2xl"
 			initial={{ y: -100, opacity: 0 }}
 			animate={{ y: 0, opacity: 1 }}
 			transition={{ duration: 0.4, ease: "easeOut" }}

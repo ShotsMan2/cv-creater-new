@@ -1,8 +1,8 @@
-import { adminProcedure } from "../../context";
-import { db } from "@reactive-resume/db/client";
-import { user, auditLog } from "@reactive-resume/db/schema";
 import { desc } from "drizzle-orm";
 import { z } from "zod";
+import { db } from "@reactive-resume/db/client";
+import { auditLog, user } from "@reactive-resume/db/schema";
+import { adminProcedure } from "../../context";
 
 export const adminRouter = {
 	getUsers: adminProcedure
@@ -16,18 +16,16 @@ export const adminRouter = {
 			successDescription: "A list of users.",
 		})
 		.input(
-			z.object({
-				limit: z.number().min(1).max(100).default(50),
-				offset: z.number().min(0).default(0),
-			}).optional().default({ limit: 50, offset: 0 })
+			z
+				.object({
+					limit: z.number().min(1).max(100).default(50),
+					offset: z.number().min(0).default(0),
+				})
+				.optional()
+				.default({ limit: 50, offset: 0 }),
 		)
 		.handler(async ({ input }) => {
-			const users = await db
-				.select()
-				.from(user)
-				.limit(input.limit)
-				.offset(input.offset)
-				.orderBy(desc(user.createdAt));
+			const users = await db.select().from(user).limit(input.limit).offset(input.offset).orderBy(desc(user.createdAt));
 			return users;
 		}),
 
@@ -42,10 +40,13 @@ export const adminRouter = {
 			successDescription: "A list of audit logs.",
 		})
 		.input(
-			z.object({
-				limit: z.number().min(1).max(100).default(50),
-				offset: z.number().min(0).default(0),
-			}).optional().default({ limit: 50, offset: 0 })
+			z
+				.object({
+					limit: z.number().min(1).max(100).default(50),
+					offset: z.number().min(0).default(0),
+				})
+				.optional()
+				.default({ limit: 50, offset: 0 }),
 		)
 		.handler(async ({ input }) => {
 			const logs = await db

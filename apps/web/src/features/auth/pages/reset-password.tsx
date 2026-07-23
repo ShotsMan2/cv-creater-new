@@ -12,7 +12,7 @@ import { authClient } from "@/libs/auth/client";
 import { useAppForm } from "@/libs/tanstack-form";
 
 const formSchema = z.object({
-	password: z.string().min(6).max(64),
+	password: z.string().min(8).max(64),
 });
 
 type Props = {
@@ -81,7 +81,7 @@ export function ResetPasswordPage({ token }: Props) {
 								<FormControl
 									render={
 										<Input
-											min={6}
+											min={8}
 											max={64}
 											type={showPassword ? "text" : "password"}
 											autoComplete="new-password"

@@ -47,7 +47,7 @@
 	--sidebar-primary: oklch(0.35 0.08 250);
 	--sidebar-ring: oklch(0.35 0.08 250);
 	--sidebar: oklch(0.98 0.005 250);
-	
+
 	--gradient-glow: oklch(0.9 0.05 250 / 50%);
 }
 
@@ -84,7 +84,7 @@
 	--sidebar-primary: oklch(0.65 0.12 250);
 	--sidebar-ring: oklch(0.65 0.12 250);
 	--sidebar: oklch(0.15 0.015 250);
-	
+
 	--gradient-glow: oklch(0.3 0.1 250 / 20%);
 }
 
@@ -144,7 +144,7 @@
 	body {
 		@apply text-sm proportional-nums antialiased selection:bg-primary selection:text-primary-foreground text-foreground;
 		background-color: var(--background);
-		background-image: 
+		background-image:
 			radial-gradient(circle at 15% 50%, var(--gradient-glow), transparent 30%),
 			radial-gradient(circle at 85% 30%, var(--gradient-glow), transparent 30%);
 		background-attachment: fixed;
@@ -167,7 +167,7 @@
 	.wysiwyg {
 		@apply prose prose-sm prose-slate dark:prose-invert max-w-none prose-p:my-3! prose-li:my-3! prose-ul:my-3! prose-ol:my-3!;
 	}
-	
+
 	.glass {
 		@apply bg-background/80 backdrop-blur-md border border-border/50 shadow-sm;
 	}

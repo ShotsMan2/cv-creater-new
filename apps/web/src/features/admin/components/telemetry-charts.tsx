@@ -3,7 +3,10 @@ import { Area, AreaChart, Bar, BarChart, CartesianGrid, ResponsiveContainer, Too
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@reactive-resume/ui/components/card";
 
 const mockLineData = Array.from({ length: 30 }).map((_, i) => ({
-	date: new Date(Date.now() - (29 - i) * 24 * 60 * 60 * 1000).toLocaleDateString(undefined, { month: "short", day: "numeric" }),
+	date: new Date(Date.now() - (29 - i) * 24 * 60 * 60 * 1000).toLocaleDateString(undefined, {
+		month: "short",
+		day: "numeric",
+	}),
 	activeUsers: Math.floor(Math.random() * 500) + 1000,
 	newSignups: Math.floor(Math.random() * 50) + 10,
 }));
@@ -38,14 +41,44 @@ export function TelemetryCharts() {
 								</linearGradient>
 							</defs>
 							<CartesianGrid strokeDasharray="3 3" vertical={false} stroke="hsl(var(--border))" />
-							<XAxis dataKey="date" stroke="hsl(var(--muted-foreground))" fontSize={12} tickLine={false} axisLine={false} />
-							<YAxis stroke="hsl(var(--muted-foreground))" fontSize={12} tickLine={false} axisLine={false} tickFormatter={(v) => `${v}`} />
-							<Tooltip 
-								contentStyle={{ backgroundColor: "hsl(var(--background))", borderColor: "hsl(var(--border))", borderRadius: "8px" }}
+							<XAxis
+								dataKey="date"
+								stroke="hsl(var(--muted-foreground))"
+								fontSize={12}
+								tickLine={false}
+								axisLine={false}
+							/>
+							<YAxis
+								stroke="hsl(var(--muted-foreground))"
+								fontSize={12}
+								tickLine={false}
+								axisLine={false}
+								tickFormatter={(v) => `${v}`}
+							/>
+							<Tooltip
+								contentStyle={{
+									backgroundColor: "hsl(var(--background))",
+									borderColor: "hsl(var(--border))",
+									borderRadius: "8px",
+								}}
 								itemStyle={{ color: "hsl(var(--foreground))" }}
 							/>
-							<Area type="monotone" dataKey="activeUsers" name={t`Active Users`} stroke="#3b82f6" fillOpacity={1} fill="url(#colorUsers)" />
-							<Area type="monotone" dataKey="newSignups" name={t`New Signups`} stroke="#10b981" fillOpacity={1} fill="url(#colorSignups)" />
+							<Area
+								type="monotone"
+								dataKey="activeUsers"
+								name={t`Active Users`}
+								stroke="#3b82f6"
+								fillOpacity={1}
+								fill="url(#colorUsers)"
+							/>
+							<Area
+								type="monotone"
+								dataKey="newSignups"
+								name={t`New Signups`}
+								stroke="#10b981"
+								fillOpacity={1}
+								fill="url(#colorSignups)"
+							/>
 						</AreaChart>
 					</ResponsiveContainer>
 				</CardContent>
@@ -60,10 +93,20 @@ export function TelemetryCharts() {
 					<ResponsiveContainer width="100%" height="100%">
 						<BarChart data={mockBarData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
 							<CartesianGrid strokeDasharray="3 3" vertical={false} stroke="hsl(var(--border))" />
-							<XAxis dataKey="name" stroke="hsl(var(--muted-foreground))" fontSize={12} tickLine={false} axisLine={false} />
+							<XAxis
+								dataKey="name"
+								stroke="hsl(var(--muted-foreground))"
+								fontSize={12}
+								tickLine={false}
+								axisLine={false}
+							/>
 							<YAxis stroke="hsl(var(--muted-foreground))" fontSize={12} tickLine={false} axisLine={false} />
-							<Tooltip 
-								contentStyle={{ backgroundColor: "hsl(var(--background))", borderColor: "hsl(var(--border))", borderRadius: "8px" }}
+							<Tooltip
+								contentStyle={{
+									backgroundColor: "hsl(var(--background))",
+									borderColor: "hsl(var(--border))",
+									borderRadius: "8px",
+								}}
 								itemStyle={{ color: "hsl(var(--foreground))" }}
 								cursor={{ fill: "hsl(var(--muted))" }}
 							/>

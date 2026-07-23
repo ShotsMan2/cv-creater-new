@@ -50,7 +50,9 @@ function InviteMemberDialog({ workspaceId }: { workspaceId: string }) {
 				role: data.role as "admin" | "member" | "recruiter" | "auditor",
 			}),
 		onSuccess: () => {
-			void queryClient.invalidateQueries({ queryKey: orpc.workspace.members.list.queryKey({ input: { workspaceId } }) });
+			void queryClient.invalidateQueries({
+				queryKey: orpc.workspace.members.list.queryKey({ input: { workspaceId } }),
+			});
 			setOpen(false);
 		},
 	});
@@ -157,13 +159,18 @@ function MemberList({ workspaceId }: { workspaceId: string }) {
 				memberId: data.memberId,
 				role: data.role as "owner" | "admin" | "member" | "recruiter" | "auditor",
 			}),
-		onSuccess: () => void queryClient.invalidateQueries({ queryKey: orpc.workspace.members.list.queryKey({ input: { workspaceId } }) }),
+		onSuccess: () =>
+			void queryClient.invalidateQueries({
+				queryKey: orpc.workspace.members.list.queryKey({ input: { workspaceId } }),
+			}),
 	});
 
 	const removeMutation = useMutation({
-		mutationFn: (memberId: string) =>
-			client.workspace.members.remove({ workspaceId, memberId }),
-		onSuccess: () => void queryClient.invalidateQueries({ queryKey: orpc.workspace.members.list.queryKey({ input: { workspaceId } }) }),
+		mutationFn: (memberId: string) => client.workspace.members.remove({ workspaceId, memberId }),
+		onSuccess: () =>
+			void queryClient.invalidateQueries({
+				queryKey: orpc.workspace.members.list.queryKey({ input: { workspaceId } }),
+			}),
 	});
 
 	const handleRemove = async (memberId: string, name: string) => {

@@ -12,15 +12,15 @@ const dbMock = vi.hoisted(() => {
 });
 
 vi.mock("@reactive-resume/db/client", () => ({ db: dbMock }));
-vi.mock("@reactive-resume/db/schema", () => ({ 
+vi.mock("@reactive-resume/db/schema", () => ({
 	user: { __table: "user", createdAt: "created_at" },
-	auditLog: { __table: "auditLog", createdAt: "created_at" }
+	auditLog: { __table: "auditLog", createdAt: "created_at" },
 }));
 vi.mock("drizzle-orm", () => ({ desc: vi.fn() }));
 
+import { ORPCError } from "@orpc/server";
 // After mocks, import the router
 import { adminRouter } from "./router";
-import { ORPCError } from "@orpc/server";
 
 describe("adminRouter", () => {
 	afterEach(() => {
@@ -36,7 +36,7 @@ describe("adminRouter", () => {
 			} as any;
 
 			const result = await adminRouter.getUsers({ limit: 10, offset: 0 }, { context });
-			
+
 			expect(result).toEqual(dbResult);
 			expect(dbMock.select).toHaveBeenCalled();
 		});
@@ -48,8 +48,9 @@ describe("adminRouter", () => {
 				locale: "en-US",
 			} as any;
 
-			await expect(adminRouter.getUsers({ limit: 10, offset: 0 }, { context }))
-				.rejects.toThrowError(new ORPCError("FORBIDDEN", { message: "Admin access required" }));
+			await expect(adminRouter.getUsers({ limit: 10, offset: 0 }, { context })).rejects.toThrowError(
+				new ORPCError("FORBIDDEN", { message: "Admin access required" }),
+			);
 		});
 
 		it("rejects unauthenticated users with UNAUTHORIZED", async () => {
@@ -59,8 +60,9 @@ describe("adminRouter", () => {
 				locale: "en-US",
 			} as any;
 
-			await expect(adminRouter.getUsers({ limit: 10, offset: 0 }, { context }))
-				.rejects.toThrowError(new ORPCError("UNAUTHORIZED"));
+			await expect(adminRouter.getUsers({ limit: 10, offset: 0 }, { context })).rejects.toThrowError(
+				new ORPCError("UNAUTHORIZED"),
+			);
 		});
 	});
 
@@ -73,7 +75,7 @@ describe("adminRouter", () => {
 			} as any;
 
 			const result = await adminRouter.getAuditLogs({ limit: 10, offset: 0 }, { context });
-			
+
 			expect(result).toEqual(dbResult);
 			expect(dbMock.select).toHaveBeenCalled();
 		});
@@ -85,8 +87,9 @@ describe("adminRouter", () => {
 				locale: "en-US",
 			} as any;
 
-			await expect(adminRouter.getAuditLogs({ limit: 10, offset: 0 }, { context }))
-				.rejects.toThrowError(new ORPCError("FORBIDDEN", { message: "Admin access required" }));
+			await expect(adminRouter.getAuditLogs({ limit: 10, offset: 0 }, { context })).rejects.toThrowError(
+				new ORPCError("FORBIDDEN", { message: "Admin access required" }),
+			);
 		});
 	});
 });
