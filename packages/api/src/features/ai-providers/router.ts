@@ -26,6 +26,10 @@ function isAgentEnvironmentUnavailable(error: unknown) {
 	return error instanceof Error && error.message === "AGENT_ENVIRONMENT_UNAVAILABLE";
 }
 
+function isCredentialEncryptionUnavailable(error: unknown) {
+	return error instanceof Error && error.message === "AI_CREDENTIAL_ENCRYPTION_UNAVAILABLE";
+}
+
 function throwUnavailable(): never {
 	throw new ORPCError("PRECONDITION_FAILED", {
 		message: "AI agent workspace is unavailable because REDIS_URL or ENCRYPTION_SECRET is not configured.",
@@ -58,7 +62,7 @@ export const aiProvidersRouter = {
 			try {
 				return await aiProvidersService.list({ userId: context.user.id });
 			} catch (error) {
-				if (isAgentEnvironmentUnavailable(error)) throwUnavailable();
+				if (isAgentEnvironmentUnavailable(error) || isCredentialEncryptionUnavailable(error)) throwUnavailable();
 				throw error;
 			}
 		}),
@@ -89,7 +93,7 @@ export const aiProvidersRouter = {
 					apiKey: input.apiKey,
 				});
 			} catch (error) {
-				if (isAgentEnvironmentUnavailable(error)) throwUnavailable();
+				if (isAgentEnvironmentUnavailable(error) || isCredentialEncryptionUnavailable(error)) throwUnavailable();
 				if (isInvalidAiBaseUrl(error)) throwInvalidProviderConfig();
 				throw error;
 			}
@@ -125,7 +129,7 @@ export const aiProvidersRouter = {
 					...(input.enabled !== undefined ? { enabled: input.enabled } : {}),
 				});
 			} catch (error) {
-				if (isAgentEnvironmentUnavailable(error)) throwUnavailable();
+				if (isAgentEnvironmentUnavailable(error) || isCredentialEncryptionUnavailable(error)) throwUnavailable();
 				if (isInvalidAiBaseUrl(error)) throwInvalidProviderConfig();
 				throw error;
 			}
@@ -149,7 +153,7 @@ export const aiProvidersRouter = {
 			try {
 				await aiProvidersService.delete({ id: input.id, userId: context.user.id });
 			} catch (error) {
-				if (isAgentEnvironmentUnavailable(error)) throwUnavailable();
+				if (isAgentEnvironmentUnavailable(error) || isCredentialEncryptionUnavailable(error)) throwUnavailable();
 				throw error;
 			}
 		}),
@@ -176,7 +180,7 @@ export const aiProvidersRouter = {
 			try {
 				return await aiProvidersService.test({ id: input.id, userId: context.user.id });
 			} catch (error) {
-				if (isAgentEnvironmentUnavailable(error)) throwUnavailable();
+				if (isAgentEnvironmentUnavailable(error) || isCredentialEncryptionUnavailable(error)) throwUnavailable();
 				if (isInvalidAiBaseUrl(error)) throwInvalidProviderConfig();
 				if (error instanceof ORPCError) throw error;
 				throw new ORPCError("BAD_GATEWAY", { message: "Could not reach the AI provider." });

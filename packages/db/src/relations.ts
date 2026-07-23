@@ -20,9 +20,13 @@ export const relations = defineRelations(schema, (r) => ({
 		oauthConsents: r.many.oauthConsent(),
 		ownedWorkspaces: r.many.workspace(),
 		workspaceMemberships: r.many.workspaceMember({
+			from: r.user.id,
+			to: r.workspaceMember.userId,
 			alias: "workspaceMember_user",
 		}),
 		workspaceInvitesSent: r.many.workspaceInvite({
+			from: r.user.id,
+			to: r.workspaceInvite.invitedBy,
 			alias: "workspaceInvite_inviter",
 		}),
 		auditLogs: r.many.auditLog(),

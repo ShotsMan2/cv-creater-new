@@ -22,12 +22,13 @@ function getCsrfToken(): string | null {
 const createRpcClient = (): RouterClient<typeof router> => {
 	const link = new RPCLink({
 		url: getRpcUrl(),
-		fetch: (request, init) => {
+		fetch: (url, init) => {
 			const csrfToken = getCsrfToken();
+			const headers = new Headers(init?.headers);
 			if (csrfToken) {
-				request.headers.set("x-csrf-token", csrfToken);
+				headers.set("x-csrf-token", csrfToken);
 			}
-			return fetch(request, { ...init, credentials: "include" });
+			return fetch(url, { ...init, headers, credentials: "include" });
 		},
 		plugins: [
 			new BatchLinkPlugin({
@@ -51,12 +52,13 @@ export const client = createRpcClient();
 const createStreamClient = (): RouterClient<typeof router> => {
 	const link = new RPCLink({
 		url: getRpcUrl(),
-		fetch: (request, init) => {
+		fetch: (url, init) => {
 			const csrfToken = getCsrfToken();
+			const headers = new Headers(init?.headers);
 			if (csrfToken) {
-				request.headers.set("x-csrf-token", csrfToken);
+				headers.set("x-csrf-token", csrfToken);
 			}
-			return fetch(request, { ...init, credentials: "include" });
+			return fetch(url, { ...init, headers, credentials: "include" });
 		},
 		interceptors: [
 			onError((error) => {
