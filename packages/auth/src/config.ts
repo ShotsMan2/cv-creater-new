@@ -139,7 +139,7 @@ const getAuthConfig = () => {
 			autoSignIn: true,
 			minPasswordLength: 8,
 			maxPasswordLength: 64,
-			requireEmailVerification: false,
+			requireEmailVerification: true,
 			disableSignUp: env.FLAG_DISABLE_SIGNUPS || env.FLAG_DISABLE_EMAIL_AUTH,
 			sendResetPassword: async ({ user, url }) => {
 				await sendEmail({
@@ -149,8 +149,25 @@ const getAuthConfig = () => {
 				});
 			},
 			password: {
-				hash: (password) => hash(password, 10),
-				verify: ({ password, hash }) => compare(password, hash),
+				hash: async (password: string) => {
+					if (password.length < 8) {
+						throw new Error("Password must be at least 8 characters");
+					}
+					if (!/[A-Z]/.test(password)) {
+						throw new Error("Password must contain at least one uppercase letter");
+					}
+					if (!/[a-z]/.test(password)) {
+						throw new Error("Password must contain at least one lowercase letter");
+					}
+					if (!/[0-9]/.test(password)) {
+						throw new Error("Password must contain at least one number");
+					}
+					if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)) {
+						throw new Error("Password must contain at least one special character");
+					}
+					return hash(password, 12);
+				},
+				verify: async ({ password, hash: hashStr }) => compare(password, hashStr),
 			},
 		},
 

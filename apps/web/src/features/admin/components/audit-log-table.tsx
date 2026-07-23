@@ -1,5 +1,5 @@
 import { t } from "@lingui/core/macro";
-import { FunnelIcon, MagnifyingGlassIcon } from "@phosphor-icons/react";
+import { Funnel, MagnifyingGlass } from "@phosphor-icons/react";
 import { useState } from "react";
 import { Badge } from "@reactive-resume/ui/components/badge";
 import { Button } from "@reactive-resume/ui/components/button";
@@ -58,7 +58,7 @@ function AuditRow({ entry }: { entry: AuditEntry }) {
 						<DialogTrigger
 							render={
 								<Button variant="ghost" size="xs">
-									<FunnelIcon className="size-3.5" />
+									<Funnel className="size-3.5" />
 								</Button>
 							}
 						/>
@@ -104,8 +104,8 @@ export function AuditLogTable({ workspaceId: _workspaceId }: { workspaceId?: str
 		}),
 	);
 
-	const paginated = result ?? [];
-	const totalItems = result?.length ?? 0;
+	const paginated = result?.data ?? [];
+	const totalItems = result?.total ?? 0;
 	const totalPages = Math.ceil(totalItems / limit);
 
 	// Actions are normally dynamic, but without a specific endpoint for them we can just list standard ones or leave it empty,
@@ -125,7 +125,7 @@ export function AuditLogTable({ workspaceId: _workspaceId }: { workspaceId?: str
 		<div className="space-y-4">
 			<div className="flex items-center gap-x-3">
 				<div className="relative max-w-sm flex-1">
-					<MagnifyingGlassIcon className="absolute start-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+					<MagnifyingGlass className="absolute start-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
 					<Input
 						placeholder={t`Search audit log...`}
 						value={search}

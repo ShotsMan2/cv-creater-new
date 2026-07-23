@@ -5,11 +5,13 @@ import { aiProvidersRouter } from "../features/ai-providers/router";
 import { auditRouter } from "../features/audit/router";
 import { authRouter } from "../features/auth/router";
 import { flagsRouter } from "../features/flags/router";
+import { gdprRouter } from "../features/gdpr/router";
 import { quotaRouter } from "../features/quota/router";
 import { resumeRouter } from "../features/resume/router";
 import { statisticsRouter } from "../features/statistics/router";
 import { storageRouter } from "../features/storage/router";
 import { telemetryRouter } from "../features/telemetry/router";
+import { webhookRouter } from "../features/webhook/router";
 import { workspaceRouter } from "../features/workspace/router";
 
 export default {
@@ -20,10 +22,12 @@ export default {
 	audit: auditRouter,
 	auth: authRouter,
 	flags: flagsRouter,
+	gdpr: gdprRouter,
 	resume: resumeRouter,
 	quota: quotaRouter,
 	statistics: statisticsRouter,
 	storage: storageRouter,
 	telemetry: telemetryRouter,
+	webhook: webhookRouter,
 	workspace: workspaceRouter,
 };

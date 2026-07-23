@@ -17,6 +17,7 @@ import { getStorageService } from "../storage/service";
 import { grantResumeAccess, hasResumeAccess } from "./access";
 import { assertCanView, isOwner, redactResumeForViewer, shouldCountForStatistics } from "./access-policy";
 import { publishResumeUpdated } from "./events";
+import { auditResumeOperation } from "../audit/middleware";
 
 type DbOrTx = typeof db | Parameters<Parameters<typeof db.transaction>[0]>[0];
 
@@ -366,6 +367,8 @@ export const resumeService = {
 				mutation: "create",
 			});
 
+			auditResumeOperation({ userId: input.userId, action: "resume.create", entityId: id });
+
 			return id;
 		} catch (error) {
 			const constraint = get(error, "cause.constraint") as string | undefined;
@@ -436,6 +439,8 @@ export const resumeService = {
 				mutation: "update",
 			});
 
+			auditResumeOperation({ userId: input.userId, action: "resume.update", entityId: resume.id });
+
 			return resume;
 		} catch (error) {
 			if (error instanceof ORPCError) throw error;
@@ -459,6 +464,8 @@ export const resumeService = {
 			updatedAt: resume.updatedAt.toISOString(),
 			mutation: "patch",
 		});
+
+		auditResumeOperation({ userId: input.userId, action: "resume.patch", entityId: resume.id });
 
 		return resume;
 	},
@@ -491,6 +498,8 @@ export const resumeService = {
 			updatedAt: resume.updatedAt.toISOString(),
 			mutation: "lock",
 		});
+
+		auditResumeOperation({ userId: input.userId, action: `resume.${input.isLocked ? "lock" : "unlock"}`, entityId: resume.id });
 	},
 
 	setPassword: async (input: { id: string; userId: string; password: string }) => {
@@ -511,6 +520,8 @@ export const resumeService = {
 			updatedAt: resume.updatedAt.toISOString(),
 			mutation: "password",
 		});
+
+		auditResumeOperation({ userId: input.userId, action: "resume.password-set", entityId: resume.id });
 	},
 
 	verifyPassword: async (input: { slug: string; username: string; password: string; responseHeaders?: Headers }) => {
@@ -554,6 +565,8 @@ export const resumeService = {
 			updatedAt: resume.updatedAt.toISOString(),
 			mutation: "password",
 		});
+
+		auditResumeOperation({ userId: input.userId, action: "resume.password-remove", entityId: resume.id });
 	},
 
 	delete: async (input: { id: string; userId: string }) => {
@@ -583,5 +596,7 @@ export const resumeService = {
 			updatedAt: new Date().toISOString(),
 			mutation: "delete",
 		});
+
+		auditResumeOperation({ userId: input.userId, action: "resume.delete", entityId: input.id });
 	},
 };

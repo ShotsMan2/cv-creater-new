@@ -31,13 +31,18 @@ import { Route as AgentNewRouteImport } from "./routes/agent/new";
 import { Route as AgentThreadIdRouteImport } from "./routes/agent/$threadId";
 import { Route as AdminWorkspacesRouteImport } from "./routes/admin/workspaces";
 import { Route as AdminUsersRouteImport } from "./routes/admin/users";
+import { Route as AdminTemplatesRouteImport } from "./routes/admin/templates";
 import { Route as AdminTelemetryRouteImport } from "./routes/admin/telemetry";
+import { Route as AdminSettingsRouteImport } from "./routes/admin/settings";
 import { Route as AdminAuditLogsRouteImport } from "./routes/admin/audit-logs";
+import { Route as AdminAnalyticsRouteImport } from "./routes/admin/analytics";
 import { Route as UsernameSlugRouteImport } from "./routes/$username/$slug";
 import { Route as BuilderResumeIdRouteRouteImport } from "./routes/builder/$resumeId/route";
 import { Route as DashboardResumesIndexRouteImport } from "./routes/dashboard/resumes/index";
 import { Route as BuilderResumeIdIndexRouteImport } from "./routes/builder/$resumeId/index";
+import { Route as DashboardSettingsWebhooksRouteImport } from "./routes/dashboard/settings/webhooks";
 import { Route as DashboardSettingsProfileRouteImport } from "./routes/dashboard/settings/profile";
+import { Route as DashboardSettingsPrivacyRouteImport } from "./routes/dashboard/settings/privacy";
 import { Route as DashboardSettingsPreferencesRouteImport } from "./routes/dashboard/settings/preferences";
 import { Route as DashboardSettingsJobSearchRouteImport } from "./routes/dashboard/settings/job-search";
 import { Route as DashboardSettingsDangerZoneRouteImport } from "./routes/dashboard/settings/danger-zone";
@@ -154,14 +159,29 @@ const AdminUsersRoute = AdminUsersRouteImport.update({
   path: "/users",
   getParentRoute: () => AdminRouteRoute,
 } as any);
+const AdminTemplatesRoute = AdminTemplatesRouteImport.update({
+  id: "/templates",
+  path: "/templates",
+  getParentRoute: () => AdminRouteRoute,
+} as any);
 const AdminTelemetryRoute = AdminTelemetryRouteImport.update({
   id: "/telemetry",
   path: "/telemetry",
   getParentRoute: () => AdminRouteRoute,
 } as any);
+const AdminSettingsRoute = AdminSettingsRouteImport.update({
+  id: "/settings",
+  path: "/settings",
+  getParentRoute: () => AdminRouteRoute,
+} as any);
 const AdminAuditLogsRoute = AdminAuditLogsRouteImport.update({
   id: "/audit-logs",
   path: "/audit-logs",
+  getParentRoute: () => AdminRouteRoute,
+} as any);
+const AdminAnalyticsRoute = AdminAnalyticsRouteImport.update({
+  id: "/analytics",
+  path: "/analytics",
   getParentRoute: () => AdminRouteRoute,
 } as any);
 const UsernameSlugRoute = UsernameSlugRouteImport.update({
@@ -184,10 +204,22 @@ const BuilderResumeIdIndexRoute = BuilderResumeIdIndexRouteImport.update({
   path: "/",
   getParentRoute: () => BuilderResumeIdRouteRoute,
 } as any);
+const DashboardSettingsWebhooksRoute =
+  DashboardSettingsWebhooksRouteImport.update({
+    id: "/settings/webhooks",
+    path: "/settings/webhooks",
+    getParentRoute: () => DashboardRouteRoute,
+  } as any);
 const DashboardSettingsProfileRoute =
   DashboardSettingsProfileRouteImport.update({
     id: "/settings/profile",
     path: "/settings/profile",
+    getParentRoute: () => DashboardRouteRoute,
+  } as any);
+const DashboardSettingsPrivacyRoute =
+  DashboardSettingsPrivacyRouteImport.update({
+    id: "/settings/privacy",
+    path: "/settings/privacy",
     getParentRoute: () => DashboardRouteRoute,
   } as any);
 const DashboardSettingsPreferencesRoute =
@@ -235,8 +267,11 @@ export interface FileRoutesByFullPath {
   "/dashboard": typeof DashboardRouteRouteWithChildren;
   "/builder/$resumeId": typeof BuilderResumeIdRouteRouteWithChildren;
   "/$username/$slug": typeof UsernameSlugRoute;
+  "/admin/analytics": typeof AdminAnalyticsRoute;
   "/admin/audit-logs": typeof AdminAuditLogsRoute;
+  "/admin/settings": typeof AdminSettingsRoute;
   "/admin/telemetry": typeof AdminTelemetryRoute;
+  "/admin/templates": typeof AdminTemplatesRoute;
   "/admin/users": typeof AdminUsersRoute;
   "/admin/workspaces": typeof AdminWorkspacesRoute;
   "/agent/$threadId": typeof AgentThreadIdRoute;
@@ -258,15 +293,20 @@ export interface FileRoutesByFullPath {
   "/dashboard/settings/danger-zone": typeof DashboardSettingsDangerZoneRoute;
   "/dashboard/settings/job-search": typeof DashboardSettingsJobSearchRoute;
   "/dashboard/settings/preferences": typeof DashboardSettingsPreferencesRoute;
+  "/dashboard/settings/privacy": typeof DashboardSettingsPrivacyRoute;
   "/dashboard/settings/profile": typeof DashboardSettingsProfileRoute;
+  "/dashboard/settings/webhooks": typeof DashboardSettingsWebhooksRoute;
   "/builder/$resumeId/": typeof BuilderResumeIdIndexRoute;
   "/dashboard/resumes/": typeof DashboardResumesIndexRoute;
   "/dashboard/settings/authentication/": typeof DashboardSettingsAuthenticationIndexRoute;
 }
 export interface FileRoutesByTo {
   "/$username/$slug": typeof UsernameSlugRoute;
+  "/admin/analytics": typeof AdminAnalyticsRoute;
   "/admin/audit-logs": typeof AdminAuditLogsRoute;
+  "/admin/settings": typeof AdminSettingsRoute;
   "/admin/telemetry": typeof AdminTelemetryRoute;
+  "/admin/templates": typeof AdminTemplatesRoute;
   "/admin/users": typeof AdminUsersRoute;
   "/admin/workspaces": typeof AdminWorkspacesRoute;
   "/agent/$threadId": typeof AgentThreadIdRoute;
@@ -289,7 +329,9 @@ export interface FileRoutesByTo {
   "/dashboard/settings/danger-zone": typeof DashboardSettingsDangerZoneRoute;
   "/dashboard/settings/job-search": typeof DashboardSettingsJobSearchRoute;
   "/dashboard/settings/preferences": typeof DashboardSettingsPreferencesRoute;
+  "/dashboard/settings/privacy": typeof DashboardSettingsPrivacyRoute;
   "/dashboard/settings/profile": typeof DashboardSettingsProfileRoute;
+  "/dashboard/settings/webhooks": typeof DashboardSettingsWebhooksRoute;
   "/builder/$resumeId": typeof BuilderResumeIdIndexRoute;
   "/dashboard/resumes": typeof DashboardResumesIndexRoute;
   "/dashboard/settings/authentication": typeof DashboardSettingsAuthenticationIndexRoute;
@@ -303,8 +345,11 @@ export interface FileRoutesById {
   "/dashboard": typeof DashboardRouteRouteWithChildren;
   "/builder/$resumeId": typeof BuilderResumeIdRouteRouteWithChildren;
   "/$username/$slug": typeof UsernameSlugRoute;
+  "/admin/analytics": typeof AdminAnalyticsRoute;
   "/admin/audit-logs": typeof AdminAuditLogsRoute;
+  "/admin/settings": typeof AdminSettingsRoute;
   "/admin/telemetry": typeof AdminTelemetryRoute;
+  "/admin/templates": typeof AdminTemplatesRoute;
   "/admin/users": typeof AdminUsersRoute;
   "/admin/workspaces": typeof AdminWorkspacesRoute;
   "/agent/$threadId": typeof AgentThreadIdRoute;
@@ -327,7 +372,9 @@ export interface FileRoutesById {
   "/dashboard/settings/danger-zone": typeof DashboardSettingsDangerZoneRoute;
   "/dashboard/settings/job-search": typeof DashboardSettingsJobSearchRoute;
   "/dashboard/settings/preferences": typeof DashboardSettingsPreferencesRoute;
+  "/dashboard/settings/privacy": typeof DashboardSettingsPrivacyRoute;
   "/dashboard/settings/profile": typeof DashboardSettingsProfileRoute;
+  "/dashboard/settings/webhooks": typeof DashboardSettingsWebhooksRoute;
   "/builder/$resumeId/": typeof BuilderResumeIdIndexRoute;
   "/dashboard/resumes/": typeof DashboardResumesIndexRoute;
   "/dashboard/settings/authentication/": typeof DashboardSettingsAuthenticationIndexRoute;
@@ -342,8 +389,11 @@ export interface FileRouteTypes {
     | "/dashboard"
     | "/builder/$resumeId"
     | "/$username/$slug"
+    | "/admin/analytics"
     | "/admin/audit-logs"
+    | "/admin/settings"
     | "/admin/telemetry"
+    | "/admin/templates"
     | "/admin/users"
     | "/admin/workspaces"
     | "/agent/$threadId"
@@ -365,15 +415,20 @@ export interface FileRouteTypes {
     | "/dashboard/settings/danger-zone"
     | "/dashboard/settings/job-search"
     | "/dashboard/settings/preferences"
+    | "/dashboard/settings/privacy"
     | "/dashboard/settings/profile"
+    | "/dashboard/settings/webhooks"
     | "/builder/$resumeId/"
     | "/dashboard/resumes/"
     | "/dashboard/settings/authentication/";
   fileRoutesByTo: FileRoutesByTo;
   to:
     | "/$username/$slug"
+    | "/admin/analytics"
     | "/admin/audit-logs"
+    | "/admin/settings"
     | "/admin/telemetry"
+    | "/admin/templates"
     | "/admin/users"
     | "/admin/workspaces"
     | "/agent/$threadId"
@@ -396,7 +451,9 @@ export interface FileRouteTypes {
     | "/dashboard/settings/danger-zone"
     | "/dashboard/settings/job-search"
     | "/dashboard/settings/preferences"
+    | "/dashboard/settings/privacy"
     | "/dashboard/settings/profile"
+    | "/dashboard/settings/webhooks"
     | "/builder/$resumeId"
     | "/dashboard/resumes"
     | "/dashboard/settings/authentication";
@@ -409,8 +466,11 @@ export interface FileRouteTypes {
     | "/dashboard"
     | "/builder/$resumeId"
     | "/$username/$slug"
+    | "/admin/analytics"
     | "/admin/audit-logs"
+    | "/admin/settings"
     | "/admin/telemetry"
+    | "/admin/templates"
     | "/admin/users"
     | "/admin/workspaces"
     | "/agent/$threadId"
@@ -433,7 +493,9 @@ export interface FileRouteTypes {
     | "/dashboard/settings/danger-zone"
     | "/dashboard/settings/job-search"
     | "/dashboard/settings/preferences"
+    | "/dashboard/settings/privacy"
     | "/dashboard/settings/profile"
+    | "/dashboard/settings/webhooks"
     | "/builder/$resumeId/"
     | "/dashboard/resumes/"
     | "/dashboard/settings/authentication/";
@@ -606,6 +668,13 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof AdminUsersRouteImport;
       parentRoute: typeof AdminRouteRoute;
     };
+    "/admin/templates": {
+      id: "/admin/templates";
+      path: "/templates";
+      fullPath: "/admin/templates";
+      preLoaderRoute: typeof AdminTemplatesRouteImport;
+      parentRoute: typeof AdminRouteRoute;
+    };
     "/admin/telemetry": {
       id: "/admin/telemetry";
       path: "/telemetry";
@@ -613,11 +682,25 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof AdminTelemetryRouteImport;
       parentRoute: typeof AdminRouteRoute;
     };
+    "/admin/settings": {
+      id: "/admin/settings";
+      path: "/settings";
+      fullPath: "/admin/settings";
+      preLoaderRoute: typeof AdminSettingsRouteImport;
+      parentRoute: typeof AdminRouteRoute;
+    };
     "/admin/audit-logs": {
       id: "/admin/audit-logs";
       path: "/audit-logs";
       fullPath: "/admin/audit-logs";
       preLoaderRoute: typeof AdminAuditLogsRouteImport;
+      parentRoute: typeof AdminRouteRoute;
+    };
+    "/admin/analytics": {
+      id: "/admin/analytics";
+      path: "/analytics";
+      fullPath: "/admin/analytics";
+      preLoaderRoute: typeof AdminAnalyticsRouteImport;
       parentRoute: typeof AdminRouteRoute;
     };
     "/$username/$slug": {
@@ -648,11 +731,25 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof BuilderResumeIdIndexRouteImport;
       parentRoute: typeof BuilderResumeIdRouteRoute;
     };
+    "/dashboard/settings/webhooks": {
+      id: "/dashboard/settings/webhooks";
+      path: "/settings/webhooks";
+      fullPath: "/dashboard/settings/webhooks";
+      preLoaderRoute: typeof DashboardSettingsWebhooksRouteImport;
+      parentRoute: typeof DashboardRouteRoute;
+    };
     "/dashboard/settings/profile": {
       id: "/dashboard/settings/profile";
       path: "/settings/profile";
       fullPath: "/dashboard/settings/profile";
       preLoaderRoute: typeof DashboardSettingsProfileRouteImport;
+      parentRoute: typeof DashboardRouteRoute;
+    };
+    "/dashboard/settings/privacy": {
+      id: "/dashboard/settings/privacy";
+      path: "/settings/privacy";
+      fullPath: "/dashboard/settings/privacy";
+      preLoaderRoute: typeof DashboardSettingsPrivacyRouteImport;
       parentRoute: typeof DashboardRouteRoute;
     };
     "/dashboard/settings/preferences": {
@@ -713,16 +810,22 @@ const HomeRouteRouteWithChildren = HomeRouteRoute._addFileChildren(
 );
 
 interface AdminRouteRouteChildren {
+  AdminAnalyticsRoute: typeof AdminAnalyticsRoute;
   AdminAuditLogsRoute: typeof AdminAuditLogsRoute;
+  AdminSettingsRoute: typeof AdminSettingsRoute;
   AdminTelemetryRoute: typeof AdminTelemetryRoute;
+  AdminTemplatesRoute: typeof AdminTemplatesRoute;
   AdminUsersRoute: typeof AdminUsersRoute;
   AdminWorkspacesRoute: typeof AdminWorkspacesRoute;
   AdminIndexRoute: typeof AdminIndexRoute;
 }
 
 const AdminRouteRouteChildren: AdminRouteRouteChildren = {
+  AdminAnalyticsRoute: AdminAnalyticsRoute,
   AdminAuditLogsRoute: AdminAuditLogsRoute,
+  AdminSettingsRoute: AdminSettingsRoute,
   AdminTelemetryRoute: AdminTelemetryRoute,
+  AdminTemplatesRoute: AdminTemplatesRoute,
   AdminUsersRoute: AdminUsersRoute,
   AdminWorkspacesRoute: AdminWorkspacesRoute,
   AdminIndexRoute: AdminIndexRoute,
@@ -781,7 +884,9 @@ interface DashboardRouteRouteChildren {
   DashboardSettingsDangerZoneRoute: typeof DashboardSettingsDangerZoneRoute;
   DashboardSettingsJobSearchRoute: typeof DashboardSettingsJobSearchRoute;
   DashboardSettingsPreferencesRoute: typeof DashboardSettingsPreferencesRoute;
+  DashboardSettingsPrivacyRoute: typeof DashboardSettingsPrivacyRoute;
   DashboardSettingsProfileRoute: typeof DashboardSettingsProfileRoute;
+  DashboardSettingsWebhooksRoute: typeof DashboardSettingsWebhooksRoute;
   DashboardResumesIndexRoute: typeof DashboardResumesIndexRoute;
   DashboardSettingsAuthenticationIndexRoute: typeof DashboardSettingsAuthenticationIndexRoute;
 }
@@ -794,7 +899,9 @@ const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
   DashboardSettingsDangerZoneRoute: DashboardSettingsDangerZoneRoute,
   DashboardSettingsJobSearchRoute: DashboardSettingsJobSearchRoute,
   DashboardSettingsPreferencesRoute: DashboardSettingsPreferencesRoute,
+  DashboardSettingsPrivacyRoute: DashboardSettingsPrivacyRoute,
   DashboardSettingsProfileRoute: DashboardSettingsProfileRoute,
+  DashboardSettingsWebhooksRoute: DashboardSettingsWebhooksRoute,
   DashboardResumesIndexRoute: DashboardResumesIndexRoute,
   DashboardSettingsAuthenticationIndexRoute:
     DashboardSettingsAuthenticationIndexRoute,

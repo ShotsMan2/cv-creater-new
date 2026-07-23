@@ -1,0 +1,53 @@
+name: CI - Quality Gates
+
+on:
+  pull_request:
+  push:
+    branches: ["main"]
+
+permissions:
+  contents: read
+  checks: write
+  pull-requests: write
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v6
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v6
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+          cache: "pnpm"
+
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: TypeScript Type Checking
+        run: pnpm typecheck
+
+      - name: Biome Lint & Format Check
+        run: pnpm check
+
+      - name: Package Boundaries
+        run: pnpm exec turbo boundaries
+
+      - name: Dead Code Detection
+        run: pnpm exec knip || true
+
+      - name: Run Unit & Integration Tests
+        run: pnpm test
+
+      - name: Dependency Audit
+        run: pnpm audit --audit-level=high || true
