@@ -15,10 +15,22 @@ import { handleUpload } from "../static/uploads";
 import { handleWebApp, handleWebAppHead, serveWebDistStatic } from "../static/web";
 import { handleAuth, handleOAuth } from "./auth";
 import { handleHealth } from "./health";
+import { handleDetailedHealth } from "./admin-health";
 import { handleResumePdfDownload } from "./resume-pdf";
+import { securityHeaders, handleSecurityTxt } from "./security";
+import { requestId } from "./request-id";
+import { requestLogging } from "./logging";
+import { errorTracking } from "./error-tracking";
+import { csrfMiddleware } from "./csrf";
 
 export function createApp() {
 	const app = new Hono();
+
+	app.use("*", requestId);
+	app.use("*", errorTracking);
+	app.use("*", requestLogging);
+	app.use("*", securityHeaders);
+	app.use("*", csrfMiddleware(process.env.AUTH_SECRET ?? ""));
 
 	app.all("/api/rpc", (c) => handleRpc(c.req.raw));
 	app.all("/api/rpc/*", (c) => handleRpc(c.req.raw));
@@ -27,6 +39,7 @@ export function createApp() {
 	app.get("/api/auth/oauth", (c) => handleOAuth(c.req.raw));
 	app.all("/api/auth/*", (c) => handleAuth(c.req.raw));
 	app.get("/api/health", () => handleHealth());
+	app.get("/api/health/detailed", () => handleDetailedHealth());
 	app.get("/api/resumes/:id/pdf", (c) => handleResumePdfDownload(c.req.raw, c.req.param("id")));
 	app.get("/api/uploads/*", (c) => handleUpload(c.req.raw));
 	app.get("/uploads/*", (c) => handleUpload(c.req.raw));
@@ -40,6 +53,7 @@ export function createApp() {
 	app.get("/.well-known/openid-configuration", (c) => handleOpenIdConfiguration(c.req.raw));
 	app.get("/.well-known/oauth-protected-resource", () => handleOAuthProtectedResource());
 	app.get("/.well-known/oauth-protected-resource/*", () => handleOAuthProtectedResource());
+	app.get("/.well-known/security.txt", () => handleSecurityTxt());
 	app.all("/.well-known/*", () => handleWellKnownFallback());
 
 	app.on(["GET", "HEAD"], "/robots.txt", (c) => handleRobots({ head: c.req.method === "HEAD" }));

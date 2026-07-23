@@ -20,6 +20,7 @@ import { BreakpointIndicator } from "@/components/layout/breakpoint-indicator";
 import { DonationToast } from "@/components/ui/donation-toast";
 import { DialogManager } from "@/dialogs/manager";
 import { CommandPalette } from "@/features/command-palette";
+import { CookieConsent } from "@/features/gdpr/components/cookie-consent";
 import { ThemeProvider } from "@/features/theme/provider";
 import { ConfirmDialogProvider } from "@/hooks/use-confirm";
 import { PromptDialogProvider } from "@/hooks/use-prompt";
@@ -120,6 +121,7 @@ function RootComponent() {
 													<PromptDialogProvider>
 														<Outlet />
 
+														<CookieConsent />
 														<DonationToast />
 														<DialogManager />
 														<CommandPalette />

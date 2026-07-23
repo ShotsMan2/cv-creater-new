@@ -13,10 +13,22 @@ const getRpcUrl = () => {
 	return `${window.location.origin}/api/rpc`;
 };
 
+function getCsrfToken(): string | null {
+	if (typeof document === "undefined") return null;
+	const match = document.cookie.match(/(?:^|;\s*)csrf-token=([^;]*)/);
+	return match ? decodeURIComponent(match[1]) : null;
+}
+
 const createRpcClient = (): RouterClient<typeof router> => {
 	const link = new RPCLink({
 		url: getRpcUrl(),
-		fetch: (request, init) => fetch(request, { ...init, credentials: "include" }),
+		fetch: (request, init) => {
+			const csrfToken = getCsrfToken();
+			if (csrfToken) {
+				request.headers.set("x-csrf-token", csrfToken);
+			}
+			return fetch(request, { ...init, credentials: "include" });
+		},
 		plugins: [
 			new BatchLinkPlugin({
 				mode: "streaming",
@@ -39,7 +51,13 @@ export const client = createRpcClient();
 const createStreamClient = (): RouterClient<typeof router> => {
 	const link = new RPCLink({
 		url: getRpcUrl(),
-		fetch: (request, init) => fetch(request, { ...init, credentials: "include" }),
+		fetch: (request, init) => {
+			const csrfToken = getCsrfToken();
+			if (csrfToken) {
+				request.headers.set("x-csrf-token", csrfToken);
+			}
+			return fetch(request, { ...init, credentials: "include" });
+		},
 		interceptors: [
 			onError((error) => {
 				if (error instanceof DOMException && error.name === "AbortError") return;

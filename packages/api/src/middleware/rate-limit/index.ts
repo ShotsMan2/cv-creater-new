@@ -1,6 +1,6 @@
 import { createRatelimitMiddleware } from "@orpc/experimental-ratelimit";
-import { MemoryRatelimiter } from "@orpc/experimental-ratelimit/memory";
 import { rateLimitConfig, TRUSTED_IP_HEADERS } from "@reactive-resume/utils/rate-limit";
+import { rateLimiter } from "@reactive-resume/utils/redis-rate-limit";
 
 const isRateLimitEnabled = process.env.NODE_ENV === "production";
 
@@ -9,6 +9,22 @@ type ContextWithHeaders = {
 	user?: { id: string } | null;
 };
 
+function createLimiter(config: { maxRequests: number; window: number }, prefix: string) {
+	return {
+		limit: async (key: string) => {
+			const result = await rateLimiter.check(`${prefix}:${key}`, {
+				windowMs: config.window,
+				max: config.maxRequests,
+			});
+			return {
+				success: result.success,
+				remaining: result.remaining,
+				reset: result.resetAt.getTime(),
+			};
+		},
+	};
+}
+
 function getTrustedIp(headers?: Headers): string | null {
 	if (!headers) return null;
 
@@ -16,7 +32,6 @@ function getTrustedIp(headers?: Headers): string | null {
 		const raw = headers.get(headerName)?.trim();
 		if (!raw) continue;
 
-		// Some proxies provide a comma-delimited chain; first item is the original client.
 		const ip = raw.split(",")[0]?.trim();
 		if (!ip) continue;
 
@@ -62,12 +77,12 @@ function getInputKeyPart(input: unknown): string {
 	return "no-id";
 }
 
-const resumePasswordLimiter = new MemoryRatelimiter(rateLimitConfig.orpc.resumePassword);
-const pdfLimiter = new MemoryRatelimiter(rateLimitConfig.orpc.pdfExport);
-const aiLimiter = new MemoryRatelimiter(rateLimitConfig.orpc.aiRequest);
-const storageUploadLimiter = new MemoryRatelimiter(rateLimitConfig.orpc.storageUpload);
-const storageDeleteLimiter = new MemoryRatelimiter(rateLimitConfig.orpc.storageDelete);
-const resumeMutationLimiter = new MemoryRatelimiter(rateLimitConfig.orpc.resumeMutations);
+const resumePasswordLimiter = createLimiter(rateLimitConfig.orpc.resumePassword, "resume-password");
+const pdfLimiter = createLimiter(rateLimitConfig.orpc.pdfExport, "pdf");
+const aiLimiter = createLimiter(rateLimitConfig.orpc.aiRequest, "ai");
+const storageUploadLimiter = createLimiter(rateLimitConfig.orpc.storageUpload, "storage-upload");
+const storageDeleteLimiter = createLimiter(rateLimitConfig.orpc.storageDelete, "storage-delete");
+const resumeMutationLimiter = createLimiter(rateLimitConfig.orpc.resumeMutations, "resume-mutations");
 const disabledLimiter = {
 	limit: async () => ({
 		success: true,
@@ -76,7 +91,8 @@ const disabledLimiter = {
 	}),
 };
 
-const productionLimiter = (limiter: MemoryRatelimiter) => (isRateLimitEnabled ? limiter : disabledLimiter);
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const productionLimiter = (limiter: any) => (isRateLimitEnabled ? limiter : disabledLimiter);
 
 export const resumePasswordRateLimit = createRatelimitMiddleware<
 	ContextWithHeaders,

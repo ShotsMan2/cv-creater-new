@@ -7,6 +7,7 @@ export const Route = createFileRoute("/admin")({
 	component: RouteComponent,
 	beforeLoad: async ({ context }) => {
 		if (!context.session) throw redirect({ to: "/auth/login", replace: true });
+		if (context.session.user.role !== "admin") throw redirect({ to: "/dashboard", replace: true });
 		return { session: context.session };
 	},
 	loader: async () => {

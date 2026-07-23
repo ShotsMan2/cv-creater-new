@@ -20,7 +20,7 @@ export const env = createEnv({
 		DATABASE_URL: z.url({ protocol: /postgres(ql)?/ }),
 
 		// Authentication
-		AUTH_SECRET: z.string().min(1),
+		AUTH_SECRET: z.string().min(32, "AUTH_SECRET must be at least 32 characters long"),
 		BETTER_AUTH_API_KEY: z.string().min(1).optional(),
 
 		// Social Auth (Google)
@@ -69,6 +69,13 @@ export const env = createEnv({
 		// AI Agent Workspace (optional until the agent feature is used)
 		REDIS_URL: z.url({ protocol: /redis(s)?/ }).optional(),
 		ENCRYPTION_SECRET: z.string().min(32, "ENCRYPTION_SECRET must be at least 32 characters").optional(),
+
+		// Security
+		LOG_LEVEL: z.enum(["fatal", "error", "warn", "info", "debug", "trace"]).default("info"),
+		NODE_ENV: z.enum(["development", "production", "test"]).default("development"),
+		SENTRY_DSN: z.string().url().optional(),
+		CSRF_SECRET: z.string().min(32).optional(),
+		SECURITY_CONTACT: z.string().min(1).optional(),
 
 		// Feature Flags
 		FLAG_DISABLE_SIGNUPS: z.stringbool().default(false),

@@ -8,6 +8,7 @@ import {
 	ChatCircleDotsIcon,
 	GearSixIcon,
 	KeyIcon,
+	LinkIcon,
 	ReadCvLogoIcon,
 	ShieldCheckIcon,
 	UserCircleIcon,
@@ -80,6 +81,16 @@ const settingsSidebarItems = [
 		icon: <BrainIcon />,
 		label: msg`Integrations`,
 		href: "/dashboard/settings/integrations",
+	},
+	{
+		icon: <LinkIcon />,
+		label: msg`Webhooks`,
+		href: "/dashboard/settings/webhooks",
+	},
+	{
+		icon: <ShieldCheckIcon />,
+		label: msg`Privacy & GDPR`,
+		href: "/dashboard/settings/privacy",
 	},
 	{
 		icon: <WarningIcon />,
